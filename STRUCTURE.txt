@@ -1,0 +1,121 @@
+startup-os/
+├── .claude-plugin/
+│   └── plugin.json                                  # Plugin manifest
+│
+├── .claude/
+│   └── skills/
+│       └── startup-os/
+│           ├── SKILL.md                              # Main skill (command router)
+│           ├── agents/                               # 10 specialized builders
+│           │   ├── foundation-builder.md             # 01-foundation filler
+│           │   ├── brand-builder.md                  # 02-brand filler
+│           │   ├── product-builder.md                # 03-product filler
+│           │   ├── finance-builder.md                # 04-finance filler
+│           │   ├── gtm-builder.md                    # 05-go-to-market filler
+│           │   ├── legal-builder.md                  # 06-legal filler
+│           │   ├── hiring-builder.md                 # 07-hiring filler
+│           │   ├── ops-builder.md                    # 08-operations filler
+│           │   ├── sales-builder.md                  # 09-sales filler
+│           │   └── metrics-builder.md                # 10-metrics filler
+│           └── hooks/
+│               └── post-init.md                      # Guided profile setup
+│
+├── startup-os/                                       # Template directory (copied on init)
+│   ├── CLAUDE.md                                     # Startup Profile template
+│   ├── CONTRIBUTING.md                               # Template contribution guide
+│   ├── _progress/
+│   │   └── tracker.md                                # Progress tracking (50 files)
+│   ├── .github/
+│   │   ├── PULL_REQUEST_TEMPLATE.md
+│   │   └── ISSUE_TEMPLATE/
+│   │       └── template-improvement.md
+│   ├── 01-foundation/                                # 5 templates
+│   │   ├── lean-canvas.md
+│   │   ├── problem-solution-fit.md
+│   │   ├── value-proposition.md
+│   │   ├── market-research.md
+│   │   └── competitive-analysis.md
+│   ├── 02-brand/                                     # 5 templates
+│   │   ├── brand-strategy.md
+│   │   ├── voice-and-tone.md
+│   │   ├── messaging-framework.md
+│   │   ├── visual-identity.md
+│   │   └── pitch-deck-outline.md
+│   ├── 03-product/                                   # 5 templates
+│   │   ├── user-personas.md
+│   │   ├── product-spec.md
+│   │   ├── mvp-roadmap.md
+│   │   ├── feature-prioritization.md
+│   │   └── success-metrics.md
+│   ├── 04-finance/                                   # 5 templates
+│   │   ├── financial-model.md
+│   │   ├── pricing-strategy.md
+│   │   ├── unit-economics.md
+│   │   ├── fundraising-deck.md
+│   │   └── cap-table.md
+│   ├── 05-go-to-market/                              # 5 templates
+│   │   ├── go-to-market-strategy.md
+│   │   ├── customer-acquisition.md
+│   │   ├── launch-plan.md
+│   │   ├── growth-experiments.md
+│   │   └── email-sequences.md
+│   ├── 06-legal/                                     # 5 templates
+│   │   ├── incorporation-checklist.md
+│   │   ├── terms-of-service.md
+│   │   ├── privacy-policy.md
+│   │   ├── nda-template.md
+│   │   └── advisor-agreement.md
+│   ├── 07-hiring/                                    # 5 templates
+│   │   ├── culture-doc.md
+│   │   ├── job-description-template.md
+│   │   ├── interview-kit.md
+│   │   ├── offer-letter-template.md
+│   │   └── onboarding-checklist.md
+│   ├── 08-operations/                                # 5 templates
+│   │   ├── tech-stack.md
+│   │   ├── project-management.md
+│   │   ├── meeting-cadence.md
+│   │   ├── okrs.md
+│   │   └── vendor-list.md
+│   ├── 09-sales/                                     # 5 templates
+│   │   ├── sales-playbook.md
+│   │   ├── discovery-questions.md
+│   │   ├── demo-script.md
+│   │   ├── objection-handling.md
+│   │   └── proposal-template.md
+│   └── 10-metrics/                                   # 5 templates
+│       ├── kpi-framework.md
+│       ├── dashboard-mockup.md
+│       ├── investor-update.md
+│       ├── weekly-review.md
+│       └── north-star-metric.md
+│
+├── README.md                                          # Main documentation + plugin usage
+├── INSTALLATION.md                                    # Installation guide
+├── PLUGIN_STRUCTURE.md                                # Complete architecture docs
+├── STRUCTURE.txt                                      # This file (visual tree)
+└── CHANGELOG.md                                       # Version history
+
+---
+
+SUMMARY:
+- 1 plugin manifest (plugin.json)
+- 1 main skill (SKILL.md) with 10 commands
+- 10 builder agents (one per module)
+- 1 post-init hook (guided profile setup)
+- 50 template files (5 per module × 10 modules)
+- 1 progress tracker template
+- 1 startup profile template (CLAUDE.md)
+- Complete documentation suite
+
+COMMANDS AVAILABLE:
+/startup-os init                    # Scaffold + guided setup
+/startup-os fill <module|file>      # Fill one module or file
+/startup-os fill-all                # Fill all 50 templates
+/startup-os review <file>           # Investor-grade feedback
+/startup-os stress-test             # 10 hardest questions
+/startup-os pitch-me                # Full pitch + critique
+/startup-os investor-update         # Monthly update email
+/startup-os weekly-review           # Weekly company review
+/startup-os hiring <role>           # Complete hiring package
+/startup-os status                  # Progress + next actions

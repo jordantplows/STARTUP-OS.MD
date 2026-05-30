@@ -1,0 +1,11 @@
+{
+  "name": "startup-os",
+  "version": "1.0.0",
+  "description": "Scaffold a complete startup operating system — from idea to funded company — with a single slash command.",
+  "author": "your-org",
+  "homepage": "https://github.com/your-org/startup-os",
+  "license": "MIT",
+  "skills": [".claude/skills/startup-os/SKILL.md"],
+  "hooks": [".claude/skills/startup-os/hooks/post-init.md"],
+  "minClaudeCodeVersion": "2.1.101"
+}
