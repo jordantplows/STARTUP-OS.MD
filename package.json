@@ -1,5 +1,5 @@
 {
-  "name": "startup-os",
+  "name": "@jordan.plows/startup-os",
   "version": "0.1.0",
   "description": "A complete AI-powered operating system for startups — from idea to funded company with a single command.",
   "keywords": [
@@ -11,15 +11,15 @@
     "founder",
     "operating-system"
   ],
-  "author": "your-org",
+  "author": "Jordan Plows <jordan@plows.ai>",
   "license": "MIT",
-  "homepage": "https://github.com/your-org/startup-os",
+  "homepage": "https://github.com/jordantplows/startup-os",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/startup-os.git"
+    "url": "https://github.com/jordantplows/startup-os.git"
   },
   "bugs": {
-    "url": "https://github.com/your-org/startup-os/issues"
+    "url": "https://github.com/jordantplows/startup-os/issues"
   },
   "type": "module",
   "main": "./dist/index.js",

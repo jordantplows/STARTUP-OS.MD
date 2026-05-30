@@ -1,5 +1,10 @@
 # startup-os
 
+[![npm version](https://img.shields.io/npm/v/@jordan.plows/startup-os)](https://www.npmjs.com/package/@jordan.plows/startup-os)
+[![npm downloads](https://img.shields.io/npm/dm/@jordan.plows/startup-os)](https://www.npmjs.com/package/@jordan.plows/startup-os)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![CI](https://github.com/jordantplows/startup-os/actions/workflows/ci.yml/badge.svg)](https://github.com/jordantplows/startup-os/actions/workflows/ci.yml)
+
 > A complete startup operating system — from idea validation to Series A — as a Claude Code plugin.
 
 Scaffold a production-ready startup repo in 30 seconds. Fill it with investor-grade documents in 90 minutes. Every template is cross-linked, consistent, and ready to ship.
@@ -21,12 +26,24 @@ Scaffold a production-ready startup repo in 30 seconds. Fill it with investor-gr
 
 **50 templates total.** Every file cross-references related docs, validates against your inputs, and ends with specific next steps.
 
-## Using as a Claude Code Plugin
+## Installation
+
+### As an npm package (standalone CLI)
+
+```bash
+# Install globally
+npm install -g @jordan.plows/startup-os
+
+# Or use with npx (no install needed)
+npx @jordan.plows/startup-os build "your startup idea"
+```
+
+### As a Claude Code Plugin
 
 Install once globally and scaffold a new startup-os anywhere on your machine:
 
 ```bash
-claude plugin install github:your-org/startup-os
+claude plugin install github:jordantplows/startup-os
 ```
 
 Then in any empty directory:
