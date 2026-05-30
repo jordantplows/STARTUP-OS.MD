@@ -1,0 +1,12 @@
+src/
+*.test.ts
+.claude-plugin/
+_reports/
+tsconfig*.json
+turbo.json
+.env*
+.git
+.gitignore
+SETUP_COMPLETE.md
+*/output/
+node_modules/

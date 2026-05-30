@@ -1,10 +1,59 @@
 {
   "name": "startup-os",
-  "version": "1.0.0",
-  "private": true,
+  "version": "0.1.0",
+  "description": "A complete AI-powered operating system for startups — from idea to funded company with a single command.",
+  "keywords": [
+    "startup",
+    "ai",
+    "agents",
+    "claude",
+    "business",
+    "founder",
+    "operating-system"
+  ],
+  "author": "your-org",
+  "license": "MIT",
+  "homepage": "https://github.com/your-org/startup-os",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/startup-os.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/startup-os/issues"
+  },
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "startup-os": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "strategy",
+    "brand",
+    "product",
+    "finance",
+    "marketing",
+    "sales",
+    "legal",
+    "people",
+    "operations",
+    "metrics",
+    "security",
+    "engineering",
+    ".claude",
+    ".claude-plugin",
+    "CLAUDE.md",
+    "README.md"
+  ],
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build",
+    "start": "node dist/cli.js",
+    "version:patch": "npm version patch && npm publish --access public",
+    "version:minor": "npm version minor && npm publish --access public",
+    "version:major": "npm version major && npm publish --access public"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0"
@@ -12,5 +61,8 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
