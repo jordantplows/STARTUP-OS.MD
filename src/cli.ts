@@ -110,7 +110,7 @@ async function init() {
   console.log('  startup-os build "your startup idea"\n')
 }
 
-async function runBuild(idea: string) {
+export async function runBuild(idea: string) {
   if (!idea.trim()) {
     console.error('❌ Please provide a startup idea.')
     console.error('   Example: startup-os build "AI contract review for small law firms"')
@@ -141,7 +141,7 @@ async function runBuild(idea: string) {
   printFinalSummary()
 }
 
-async function runDepartment(dept: string | undefined, agent?: string) {
+export async function runDepartment(dept: string | undefined, agent?: string) {
   if (!dept) {
     console.error('❌ Department name required. Example: startup-os run finance')
     process.exit(1)
@@ -322,7 +322,7 @@ function gatherContext(agentContent: string, currentDept: string): string {
   const readsMatch = agentContent.match(/reads:\n((?:\s+- .+\n)+)/)
   if (!readsMatch) return '(no upstream context)'
 
-  const paths = readsMatch[1]
+  const paths = (readsMatch[1] ?? '')
     .split('\n')
     .filter(l => l.trim().startsWith('- '))
     .map(l => l.trim().replace('- ', ''))
