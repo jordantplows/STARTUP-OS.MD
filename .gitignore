@@ -11,3 +11,4 @@ coverage/
 .turbo/
 _reports/**/*.md
 !_reports/**/README.md
+.vercel
