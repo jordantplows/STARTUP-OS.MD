@@ -1,122 +1,226 @@
 # startup-os
 
 [![npm version](https://img.shields.io/npm/v/@jordan.plows/startup-os)](https://www.npmjs.com/package/@jordan.plows/startup-os)
-[![npm downloads](https://img.shields.io/npm/dm/@jordan.plows/startup-os)](https://www.npmjs.com/package/@jordan.plows/startup-os)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/jordantplows/startup-os/actions/workflows/ci.yml/badge.svg)](https://github.com/jordantplows/startup-os/actions/workflows/ci.yml)
 
-> A complete startup operating system — from idea validation to Series A — as a Claude Code plugin.
+> A programming language for companies. Instantiate parallel AI agents that watch, decide, and coordinate to run your startup.
 
-Scaffold a production-ready startup repo in 30 seconds. Fill it with investor-grade documents in 90 minutes. Every template is cross-linked, consistent, and ready to ship.
+This is not a document generator. This is a company operating system.
 
-## What You Get
+## What It Actually Is
 
-**10 core modules**, each with 5 production-ready templates:
+**startup-os** is a programming language where the programs are company departments and the runtime is Claude Code.
 
-1. **Foundation** — Lean Canvas, Problem-Solution Fit, Value Prop, Market Research, Competitive Analysis
-2. **Brand** — Brand Strategy, Voice & Tone, Messaging Framework, Visual Identity, Pitch Deck
-3. **Product** — User Personas, Product Spec, MVP Roadmap, Feature Prioritization, Success Metrics
-4. **Finance** — Financial Model, Pricing Strategy, Unit Economics, Fundraising Deck, Cap Table
-5. **Go-to-Market** — GTM Strategy, Customer Acquisition, Launch Plan, Growth Experiments, Email Sequences
-6. **Legal** — Incorporation Checklist, Terms of Service, Privacy Policy, NDA, Advisor Agreement
-7. **Hiring** — Culture Doc, Job Description Template, Interview Kit, Offer Letter, Onboarding Checklist
-8. **Operations** — Tech Stack, Project Management, Meeting Cadence, OKRs, Vendor List
-9. **Sales** — Sales Playbook, Discovery Questions, Demo Script, Objection Handling, Proposal Template
-10. **Metrics** — KPI Framework, Dashboard Mockup, Investor Update, Weekly Review, North Star Metric
+When you run `/startup-os build` you don't generate documents. You instantiate a company. Every agent is a live process that watches, decides, and steers — continuously, in parallel, coordinating through shared state.
 
-**50 templates total.** Every file cross-references related docs, validates against your inputs, and ends with specific next steps.
+- The **CEO agent** doesn't write a CEO document. It acts as CEO — reading everything happening across all departments, making decisions, resolving conflicts, and surfacing questions to you.
 
-## Installation
+- The **legal agent** doesn't generate legal templates. It watches every decision every other agent makes, flags risks, and blocks anything dangerous.
 
-### As an npm package (standalone CLI)
+- The **product agent** doesn't produce a roadmap PDF. It maintains the living roadmap, prioritizes work as signals come in, writes specs when engineering needs them, and escalates blockers to the CEO.
+
+**The founder is the only human.** Your job is to answer the questions agents surface. Everything else the company does is run by agents.
+
+## Quick Start
 
 ```bash
-# Install globally
-npm install -g @jordan.plows/startup-os
-
-# Or use with npx (no install needed)
-npx @jordan.plows/startup-os build "your startup idea"
+# In Claude Code
+/startup-os build "AI-powered code review for security teams"
 ```
 
-### As a Claude Code Plugin
+You'll answer 3 clarifying questions. Then:
 
-Install once globally and scaffold a new startup-os anywhere on your machine:
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Instantiating your company...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-```bash
-claude plugin install github:jordantplows/startup-os
+Agents starting:
+● CEO          → coordinating
+● Legal        → watching
+● Product      → defining MVP
+● Red Team     → challenging assumptions
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ [COMPANY NAME] · CEO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ WHAT WE'RE BUILDING
+ [AI-powered code review that catches security issues before
+  they reach production. Targeted at security teams at Series B+
+  startups who are drowning in manual review.]
+
+ WHAT I'M FOCUSED ON
+ Validating core assumption: security teams actually want
+ automated review before manual review.
+
+ WHAT YOUR DEPARTMENTS ARE DOING
+ Product    → Defining minimum testable feature set
+ Legal      → Flagged: review AI liability for false negatives
+ Red Team   → Challenging: "security teams are cheap with tools"
+
+ FIRST DECISION I NEED FROM YOU
+ Do you want to test this with a prototype integration
+ (2 weeks, narrow test) or build a full MVP (8 weeks, broader
+ launch)? Product says prototype. Red Team says neither will
+ validate willingness to pay.
+
+ → [You type your answer here]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-Then in any empty directory:
-
-```bash
-/startup-os init
-```
-
-That's it. Claude Code will scaffold the full repo, walk you through
-your Startup Profile, and you're ready to run `/startup-os fill-all`.
-
-### All commands
-
-| Command | What it does |
-|---|---|
-| `/startup-os init` | Scaffold full repo + guided profile setup |
-| `/startup-os fill <module>` | Fill one module using your profile |
-| `/startup-os fill-all` | Fill every file, all 10 modules |
-| `/startup-os review <file>` | Get investor-grade feedback on a file |
-| `/startup-os stress-test` | 10 hardest investor questions for your model |
-| `/startup-os pitch-me` | Full pitch narrative + critique |
-| `/startup-os investor-update` | Draft monthly investor email |
-| `/startup-os weekly-review` | Generate weekly company review |
-| `/startup-os hiring <role>` | Full hiring package for any role |
-| `/startup-os status` | Progress summary + next recommended actions |
+Your company is now running. Agents surface decisions. You answer. They steer.
 
 ## How It Works
 
-1. **Init**: Creates the full 10-module structure (50 template files)
-2. **Profile**: One-time setup — 12 questions about your startup
-3. **Fill**: Claude reads your profile and fills every template with consistent, cross-referenced content
-4. **Review**: Get investor-grade feedback on any file
-5. **Iterate**: Update your profile, re-fill modules, review again
+### company.os.json — The Nervous System
 
-Every template knows about every other template. Change your pricing model? Claude updates finance, sales, and GTM docs to match. Refine your ICP? Product, brand, and sales materials stay in sync.
+Every agent reads this before acting. Every agent writes to it after acting.
 
-## What Makes This Different
-
-- **Cross-referenced**: Every file validates against related docs — no inconsistencies
-- **Investor-grade**: Written at the quality of decks that close rounds
-- **Action-oriented**: Every file ends with 3 specific, dated next steps
-- **Profile-driven**: Answer 12 questions once, get 50 consistent documents
-- **Critique-first**: Built-in `/review` and `/stress-test` commands give you hard feedback
-
-## Use Cases
-
-- **Solo founders**: Go from idea to complete operating system in one afternoon
-- **Accelerators**: Give every cohort company a consistent, complete foundation
-- **Agencies**: Scaffold client startups faster than spreadsheets
-- **VCs**: Portfolio companies use this as their operating system template
-
-## Installation (Manual)
-
-If you prefer to scaffold manually instead of installing as a plugin:
-
-```bash
-git clone https://github.com/your-org/startup-os.git
-cd startup-os
-cp -r startup-os/ ~/my-new-startup/
-cd ~/my-new-startup
+```typescript
+interface CompanyOS {
+  profile: StartupProfile           // Company identity
+  departments: DepartmentStates     // Each agent's state
+  decisions: Decision[]             // Questions waiting for answers
+  events: Event[]                   // How agents trigger each other
+  mcps: MCPConnections             // External tools wired in
+  founderInput: FounderInput[]     // Conversation log
+}
 ```
 
-Then fill out `CLAUDE.md` with your startup profile and start filling templates.
+### Agents Are Parallel Processes
+
+Each agent has four behaviors:
+
+1. **WATCH** — Conditions that trigger the agent to wake up
+2. **REASON** — Decide what to do when a watch fires
+3. **ACT** — Take action in its domain
+4. **COORDINATE** — Emit events other agents react to
+
+Agents communicate only through `company.os.json`. No direct calls. This keeps them autonomous and prevents deadlocks.
+
+### Current Agents
+
+- **CEO** — Coordinates departments, surfaces critical decisions, gives status briefings
+- **Legal** — Watches every decision for risk, flags compliance issues, blocks dangerous moves
+- **Product** — Defines what gets built, prioritizes work, writes specs on demand
+- **Red Team** — Challenges every assumption, asks the hardest questions, surfaces what could kill the company
+
+More agents coming: CFO, CTO, CMO, Engineering, Growth, Finance, Marketing, Sales.
+
+## Commands
+
+### /startup-os build "<idea>"
+
+Instantiate a company from an idea. You'll answer 3 questions. Then all agents spawn in parallel and the CEO gives you a briefing.
+
+### /startup-os ask <message>
+
+Talk to your company. Your message routes to relevant agents who respond.
+
+Examples:
+```
+/startup-os ask what should I work on today
+/startup-os ask legal, what are you watching
+/startup-os ask give me the product roadmap
+/startup-os ask red team, what's my biggest risk
+```
+
+### /startup-os status
+
+Get a real-time briefing from the CEO on company state:
+- What the company is focused on
+- What each department is doing (specific, not generic)
+- Pending decisions that need your input
+- Important signals worth knowing
+- CEO's recommendation for what you should do today
+
+### /startup-os agents
+
+List all active agents with their current state, status, and focus.
+
+### /startup-os reset
+
+Clear all company state and start over.
+
+## The Founder Conversation
+
+You never run specific commands to manage agents. You just talk in Claude Code. The system routes your message to the right agents.
+
+```
+You: "what should I work on today"
+
+CEO:  Based on current state, your highest leverage activity
+      is talking to 3 security engineers about their review
+      process. Product is blocked on whether to build auth
+      ourselves. Legal flagged GDPR risk in email sequences.
+
+      What's your instinct on auth — build or buy?
+```
+
+The agents respond with specific, actionable updates grounded in actual company state. Never generic. Always relevant.
+
+## What Gets Built
+
+A company that runs in Claude Code with:
+
+- A CEO that coordinates the whole company
+- A CFO that watches money and models scenarios
+- A CMO that shapes how the company presents itself
+- A CTO that watches technical decisions
+- A CPO that owns product direction
+- A product team that manages what gets built
+- An engineering team that reviews what's built
+- A growth team that finds customers
+- A legal team that flags risk in everything
+- A finance team that models the numbers
+- A people team that thinks about culture and hiring
+- An operations team that manages how work gets done
+- A metrics team that tracks what matters
+- A security team that watches for threats
+- A red team that challenges everything
+
+All running in parallel. All coordinating through `company.os.json`. All talking to you through Claude Code.
+
+You answer questions. The company runs.
+
+## Architecture
+
+See [runtime/README.md](./runtime/README.md) for technical details on:
+- State management (`company-os.ts`)
+- Agent lifecycle (`agent-runtime.ts`)
+- Event communication protocol
+- Adding new agents
 
 ## Requirements
 
-- [Claude Code](https://claude.ai/code) 2.1.101 or higher
-- Git (for version control)
-- A startup idea (or just curiosity)
+- [Claude Code](https://claude.com/code) 2.1.101+
+- Node.js 20+
+- Anthropic API key (set `ANTHROPIC_API_KEY`)
+
+## Installation
+
+```bash
+# Install as Claude Code plugin
+claude plugin install github:jordantplows/startup-os
+
+# Or clone and build
+git clone https://github.com/jordantplows/startup-os.git
+cd startup-os
+npm install
+npm run build
+```
 
 ## Contributing
 
-See [CONTRIBUTING.md](./startup-os/CONTRIBUTING.md) for the full template submission process.
+This is v0.3.0 — the foundational runtime is built. Next:
+
+- More agents (CFO, CTO, CMO, Engineering, Growth, etc.)
+- MCP integrations (GitHub, Linear, Slack, etc.)
+- Multi-founder mode (agents route to correct founder)
+- Agent memory (long-term learning across sessions)
+
+See issues for what's being built next.
 
 ## License
 
@@ -124,4 +228,5 @@ MIT
 
 ---
 
-Built by founders, for founders. Ship faster.
+**This is a company runtime, not a document generator.**  
+Programs are departments. Runtime is Claude Code. Founder is the only human.
