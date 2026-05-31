@@ -25,8 +25,8 @@ export const ceoAgent: AgentDefinition = {
     },
 
     (state: CompanyOS) => {
-      return state.founderInput.length > 0 &&
-             state.founderInput[state.founderInput.length - 1].respondedTo.length === 0
+      const lastInput = state.founderInput[state.founderInput.length - 1]
+      return !!(lastInput && lastInput.respondedTo.length === 0)
     },
   ],
 

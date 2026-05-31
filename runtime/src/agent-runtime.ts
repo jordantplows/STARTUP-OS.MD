@@ -119,8 +119,8 @@ Be specific. Never generic. Always grounded in the actual company state.`
         ],
       })
 
-      const content = response.content[0]
-      if (content.type !== 'text') {
+      const content = response.content?.[0]
+      if (!content || content.type !== 'text') {
         throw new Error('Unexpected response type from Claude')
       }
 
@@ -215,8 +215,8 @@ Set sequential to true if they should respond in order, false for parallel.`
         ],
       })
 
-      const content = response.content[0]
-      if (content.type !== 'text') {
+      const content = response.content?.[0]
+      if (!content || content.type !== 'text') {
         return ['ceo']
       }
 

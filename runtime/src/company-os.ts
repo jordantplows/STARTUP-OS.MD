@@ -114,14 +114,12 @@ export class CompanyOSManager {
       from: 'founder',
       payload: { decisionId, answer },
       timestamp: new Date().toISOString(),
-      consumed: [],
     })
   }
 
-  emitEvent(event: Omit<Event, 'timestamp' | 'consumed'>): void {
+  emitEvent(event: Omit<Event, 'consumed'>): void {
     this.state.events.push({
       ...event,
-      timestamp: new Date().toISOString(),
       consumed: [],
     })
     this.save()
@@ -171,7 +169,6 @@ export class CompanyOSManager {
       from: department,
       payload: action,
       timestamp: new Date().toISOString(),
-      consumed: [],
     })
   }
 
@@ -189,7 +186,6 @@ export class CompanyOSManager {
       from: 'system',
       payload: { name, activates },
       timestamp: new Date().toISOString(),
-      consumed: [],
     })
   }
 }
