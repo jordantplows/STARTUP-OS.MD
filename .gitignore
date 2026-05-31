@@ -1,14 +1,25 @@
+# Build artifacts
 node_modules/
 dist/
 *.tgz
+.turbo/
+
+# Environment
 .env
 .env.*
 .env.local
 !.env.example
+
+# Agent outputs (generated)
+stdlib/*/output/
+
+# System reports (generated)
+_reports/
+
+# Deployment
+.vercel
+
+# OS files
 .DS_Store
 *.log
 coverage/
-.turbo/
-_reports/**/*.md
-!_reports/**/README.md
-.vercel

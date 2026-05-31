@@ -25,20 +25,45 @@ This is the startup-os repository. This file contains the startup profile and bu
 ## Build Log
 <!-- Auto-updated as each department completes -->
 
-| Department   | Status      | Files Written | Completed     |
-|--------------|-------------|---------------|---------------|
-| strategy     | ⬜ pending  | -             | -             |
-| brand        | ⬜ pending  | -             | -             |
-| product      | ⬜ pending  | -             | -             |
-| finance      | ⬜ pending  | -             | -             |
-| marketing    | ⬜ pending  | -             | -             |
-| sales        | ⬜ pending  | -             | -             |
-| legal        | ⬜ pending  | -             | -             |
-| people       | ⬜ pending  | -             | -             |
-| operations   | ⬜ pending  | -             | -             |
-| metrics      | ⬜ pending  | -             | -             |
-| security     | ⬜ pending  | -             | -             |
-| engineering  | ⬜ pending  | -             | -             |
+| Department   | Agent                      | MD | PDF | CSV | HTML | SVG | Status      |
+|--------------|----------------------------|----|-----|-----|------|-----|-------------|
+| strategy     | -                          | -  | -   | -   | -    | -   | ⬜ pending  |
+| brand        | -                          | -  | -   | -   | -    | -   | ⬜ pending  |
+| product      | -                          | -  | -   | -   | -    | -   | ⬜ pending  |
+| finance      | model                      | -  | -   | -   | -    | -   | ⬜ pending  |
+| finance      | fpa                        | -  | -   | -   | -    | -   | ⬜ pending  |
+| finance      | controller                 | -  | -   | -   | -    | -   | ⬜ pending  |
+| marketing    | -                          | -  | -   | -   | -    | -   | ⬜ pending  |
+| sales        | -                          | -  | -   | -   | -    | -   | ⬜ pending  |
+| legal        | -                          | -  | -   | -   | -    | -   | ⬜ pending  |
+| people       | -                          | -  | -   | -   | -    | -   | ⬜ pending  |
+| operations   | -                          | -  | -   | -   | -    | -   | ⬜ pending  |
+| metrics      | -                          | -  | -   | -   | -    | -   | ⬜ pending  |
+| security     | -                          | -  | -   | -   | -    | -   | ⬜ pending  |
+| engineering  | -                          | -  | -   | -   | -    | -   | ⬜ pending  |
+| design       | ui-designer                | -  | -   | -   | -    | -   | ⬜ pending  |
+| design       | ux-designer                | -  | -   | -   | -    | -   | ⬜ pending  |
+| design       | canvas-designer            | -  | -   | -   | -    | -   | ⬜ pending  |
+| design       | brand-designer             | -  | -   | -   | -    | -   | ⬜ pending  |
+| design       | design-systems-engineer    | -  | -   | -   | -    | -   | ⬜ pending  |
+| design       | motion-designer            | -  | -   | -   | -    | -   | ⬜ pending  |
+| design       | ux-researcher              | -  | -   | -   | -    | -   | ⬜ pending  |
+| executive    | ceo                        | -  | -   | -   | -    | -   | ⬜ pending  |
+| executive    | cto                        | -  | -   | -   | -    | -   | ⬜ pending  |
+| executive    | cfo                        | -  | -   | -   | -    | -   | ⬜ pending  |
+| executive    | cmo                        | -  | -   | -   | -    | -   | ⬜ pending  |
+| executive    | cpo                        | -  | -   | -   | -    | -   | ⬜ pending  |
+| executive    | coo                        | -  | -   | -   | -    | -   | ⬜ pending  |
+| growth       | growth-hacker              | -  | -   | -   | -    | -   | ⬜ pending  |
+| growth       | demand-gen                 | -  | -   | -   | -    | -   | ⬜ pending  |
+| growth       | seo-specialist             | -  | -   | -   | -    | -   | ⬜ pending  |
+| growth       | content-strategist         | -  | -   | -   | -    | -   | ⬜ pending  |
+| data         | data-analyst               | -  | -   | -   | -    | -   | ⬜ pending  |
+| data         | ml-engineer                | -  | -   | -   | -    | -   | ⬜ pending  |
+| data         | bi-analyst                 | -  | -   | -   | -    | -   | ⬜ pending  |
+| customer     | customer-success           | -  | -   | -   | -    | -   | ⬜ pending  |
+| customer     | customer-support           | -  | -   | -   | -    | -   | ⬜ pending  |
+| customer     | cx-designer                | -  | -   | -   | -    | -   | ⬜ pending  |
 
 ---
 

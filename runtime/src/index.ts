@@ -1,18 +1,42 @@
-export type StartupProfile = Record<string, string>
+/**
+ * startup-os — AI company operating system
+ *
+ * This is the runtime entry point for programmatic usage.
+ * For CLI usage, use dist/cli.js directly.
+ */
 
-export interface AgentResult {
-  department: string
-  agent: string
-  output: string
-  success: boolean
+export const version = '0.1.3'
+
+export const layers = {
+  apps: 'User-land applications (git submodules)',
+  stdlib: 'Standard library (12 department agents)',
+  syscalls: 'OS primitives (read, write, exec, pipe)',
+  kernel: 'Scheduler, state, consistency, errors',
+  runtime: 'Boot process (CLI)',
+  hardware: 'Anthropic API, filesystem, CLAUDE.md'
 }
 
-export interface BuildLog {
-  department: string
-  status: 'pending' | 'done' | 'failed'
-  filesWritten: number
-  completed: string
+/**
+ * Programmatic API (not yet implemented)
+ *
+ * Future usage:
+ * ```typescript
+ * import { build, run, status } from 'startup-os'
+ *
+ * await build({ idea: 'AI contract review for law firms' })
+ * await run({ dept: 'finance', agent: 'model' })
+ * const state = await status()
+ * ```
+ */
+
+export async function build(options: { idea: string }) {
+  throw new Error('Programmatic API not yet implemented. Use CLI: startup-os build "<idea>"')
 }
 
-// Re-export main functions for programmatic use
-export { runBuild, runDepartment } from './cli.js'
+export async function run(options: { dept: string, agent?: string }) {
+  throw new Error('Programmatic API not yet implemented. Use CLI: startup-os run <dept> [agent]')
+}
+
+export async function status() {
+  throw new Error('Programmatic API not yet implemented. Use CLI: startup-os status')
+}
