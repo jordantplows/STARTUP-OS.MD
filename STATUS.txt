@@ -1,0 +1,112 @@
+# startup-os Build Status
+
+## Architecture Confirmed
+✓ .md files ARE the source code (agents)
+✓ src/ TypeScript is the runtime that executes .md files
+✓ Each .md has: frontmatter, instructions, TypeScript, coordination
+
+## Completed Agents (18/~43)
+
+### Executives (6/6) ✓
+- ceo.md - coordinates all, surfaces decisions, briefs founder
+- cfo.md - financial model, burn rate, runway alerts
+- cto.md - technical decisions, architecture, security
+- cpo.md - product-eng-design coordination
+- cmo.md - brand, messaging, growth strategy
+- coo.md - operations, removes blockers, efficiency
+
+### Strategy (5/5) ✓
+- product-direction.md - what gets built, prioritizes, specs
+- idea-canvas.md - generates lean canvas
+- competitive-intel.md - analyzes competitors
+- personas.md - defines user personas
+- mvp.md - defines MVP scope by stage
+
+### Finance (2/4)
+- model.md - maintains financial model
+- pricing.md - designs pricing strategy
+- TODO: unit-economics.md
+- TODO: fundraising.md
+
+### Legal (1/2)
+- compliance.md - watches all decisions for risk
+- TODO: entity.md
+- TODO: tos-privacy.md
+
+### Red Team (1/4)
+- assumption-audit.md - challenges all assumptions
+- TODO: business-model.md
+- TODO: investor.md
+- TODO: competitor.md
+
+## Still Need (~25 agents)
+
+### Design (0/3)
+- ui-designer.md
+- ux-designer.md
+- brand-designer.md
+
+### Engineering (0/3)
+- code-review.md
+- ci.md
+- type-safety.md
+
+### Marketing (0/3)
+- gtm-strategy.md
+- email-sequences.md
+- content-calendar.md
+
+### Sales (0/3)
+- playbook.md
+- crm.md
+- objection-handling.md
+
+### People (0/3)
+- culture.md
+- job-description.md
+- interview-kit.md
+
+### Metrics (0/2)
+- kpi-framework.md
+- investor-update.md
+
+### Growth (0/2)
+- growth-model.md
+- demand-gen.md
+
+### Customer (0/2)
+- customer-success.md
+- support.md
+
+### Core Generators (0/4)
+- generate-pdf.md
+- generate-csv.md
+- generate-html.md
+- generate-svg.md
+
+## Runtime TODO
+
+The src/ TypeScript runtime needs to:
+1. Load .md files from disk
+2. Parse frontmatter (name, description, department, role, watches)
+3. Extract TypeScript code block
+4. Execute TypeScript when agent triggered
+5. Route founder input to relevant agents based on frontmatter
+
+Current src/ files:
+- company-os.ts ✓ (state management)
+- router.ts ✓ (routes founder input)
+- cli.ts ✓ (commands)
+- agents/*.ts ✓ (old approach - DELETE THESE, use .md instead)
+
+Need to add:
+- md-loader.ts (loads and parses .md agents)
+- md-executor.ts (executes TypeScript from .md)
+
+## Next Steps
+
+1. Build remaining ~25 .md agents
+2. Update runtime to load/execute .md files
+3. Delete src/agents/*.ts (replaced by .md)
+4. Test full system with /startup-os build
+
