@@ -372,9 +372,15 @@ When you run `/startup-os build`:
 12. Other agents consume events in next cycle
 13. Founder receives responses
 
-## Current agents (47 total)
+## Current agents (70+ total)
 
-**Executives (6):** CEO, CFO, CTO, CPO, CMO, COO
+**Executives (6 folders, 34 agents total):**
+- **CEO (6 agents):** briefing, decisions, okrs, board, hiring, strategy
+- **CFO (5 agents):** model, fundraising, budget, reporting, risk
+- **CMO (5 agents):** positioning, campaigns, content, demand, brand
+- **CTO (5 agents):** architecture, engineering-health, security-posture, infrastructure, build-vs-buy
+- **CPO (5 agents):** vision, roadmap, discovery, metrics, launch
+- **COO (5 agents):** operations, scaling, vendors, people-ops, process
 
 **Strategy (5):** Product Direction, Idea Canvas, Competitive Intel, Personas, MVP
 

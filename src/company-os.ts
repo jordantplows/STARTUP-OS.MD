@@ -76,8 +76,18 @@ export interface FounderInput {
   respondedTo: string[]
 }
 
+export interface ExecutiveState {
+  status: 'initializing' | 'watching' | 'deciding' | 'steering' | 'blocked'
+  currentFocus: string
+  lastAction: Action | null
+  pendingDecisions: Decision[]
+  memory: string[]
+  signals: Signal[]
+}
+
 export interface CompanyOS {
   profile: StartupProfile
+  executives: Record<string, ExecutiveState>
   departments: Record<string, DepartmentState>
   decisions: Decision[]
   events: Event[]
@@ -124,6 +134,7 @@ export class CompanyOSManager {
         fundraisingGoal: profile?.fundraisingGoal || '[PENDING]',
         launchTarget: profile?.launchTarget || '[PENDING]',
       },
+      executives: {},
       departments: {},
       decisions: [],
       events: [],
@@ -147,6 +158,30 @@ export class CompanyOSManager {
 
   updateProfile(updates: Partial<StartupProfile>): void {
     this.state.profile = { ...this.state.profile, ...updates }
+    this.save()
+  }
+
+  initializeExecutive(name: string, initialState: Partial<ExecutiveState>): void {
+    this.state.executives[name] = {
+      status: 'initializing',
+      currentFocus: initialState.currentFocus || 'Setting up',
+      lastAction: null,
+      pendingDecisions: [],
+      memory: [],
+      signals: [],
+      ...initialState,
+    }
+    this.save()
+  }
+
+  updateExecutive(name: string, updates: Partial<ExecutiveState>): void {
+    if (!this.state.executives[name]) {
+      throw new Error(`Executive ${name} not initialized`)
+    }
+    this.state.executives[name] = {
+      ...this.state.executives[name],
+      ...updates,
+    }
     this.save()
   }
 
