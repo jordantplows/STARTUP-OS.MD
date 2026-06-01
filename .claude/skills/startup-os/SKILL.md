@@ -205,10 +205,10 @@ Unlike the business agents which build your company, the doctors are pure code d
 ### 1. Load .md agents
 
 `src/` runtime scans directories for `.md` files:
-- `executives/*.md` → executive agents (CEO, CFO, CTO, etc)
-- `departments/*/*.md` → department agents
-- `red-team/*.md` → adversarial agents
-- `core/*.md` → generation syscalls
+- `ceo/`, `cfo/`, `cto/`, `cmo/`, `cpo/`, `coo/` → executive agents
+- `strategy/`, `product/`, `design/`, `engineering/`, `finance/`, `marketing/`, `sales/`, `people/`, `legal/`, `operations/`, `metrics/`, `security/`, `growth/`, `customer/`, `data/` → department agents
+- `doctor/` → code intelligence agents
+- `core/` → generation syscalls
 
 For each .md file:
 - Parse frontmatter (YAML between `---`)
@@ -306,35 +306,51 @@ startup-os/
 │   └── skills/
 │       └── startup-os/
 │           └── SKILL.md          ← This file
-├── executives/                    ← Executive agents
-│   ├── ceo.md
-│   ├── cfo.md
+├── ceo/                          ← Executive agents (root level)
+│   ├── strategy.md
+│   ├── briefing.md
 │   └── ...
-├── departments/                   ← Department agents
-│   ├── strategy/
-│   │   ├── product-direction.md
-│   │   ├── mvp.md
-│   │   └── ...
-│   ├── finance/
-│   │   ├── model.md
-│   │   ├── pricing.md
-│   │   └── ...
+├── cfo/
+├── cto/
+├── cmo/
+├── cpo/
+├── coo/
+├── strategy/                     ← Department agents (root level)
+│   ├── product-direction.md
+│   ├── mvp.md
 │   └── ...
-├── doctor/                        ← Code intelligence agents
+├── finance/
+│   ├── model.md
+│   ├── pricing.md
+│   └── ...
+├── engineering/
+│   └── security/
+├── design/
+├── marketing/
+├── sales/
+├── people/
+├── legal/
+├── operations/
+├── metrics/
+├── growth/
+├── customer/
+├── data/
+├── doctor/                       ← Code intelligence agents
 │   ├── react-doctor.md
 │   ├── typescript-doctor.md
 │   ├── dependency-doctor.md
 │   ├── performance-doctor.md
 │   └── security-doctor.md
-├── core/                          ← Generation syscalls
+├── core/                         ← Generation syscalls
 │   ├── generate-pdf.md
 │   └── ...
-├── src/                           ← Runtime (executes .md)
+├── templates/
+├── src/                          ← Runtime (executes .md)
 │   ├── company-os.ts
 │   ├── router.ts
 │   └── cli.ts
 ├── .startup-os/
-│   └── company.os.json           ← Shared state
+│   └── company.os.json          ← Shared state
 └── package.json
 ```
 

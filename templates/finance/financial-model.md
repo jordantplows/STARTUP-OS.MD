@@ -1,6 +1,6 @@
 ---
 template: financial-model
-used-by: [departments/finance/model, departments/finance/fpa, executives/cfo]
+used-by: [finance/model, finance/fpa, executives/cfo]
 produces: company.os.departments['finance'].memory.financialModel
 ---
 

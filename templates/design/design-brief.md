@@ -1,6 +1,6 @@
 ---
 template: design-brief
-used-by: [departments/design/ui-designer, departments/design/ux-designer, departments/design/brand-designer]
+used-by: [design/ui-designer, design/ux-designer, design/brand-designer]
 produces: company.os.departments['design'].memory.briefs[]
 ---
 

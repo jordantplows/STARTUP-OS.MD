@@ -1,6 +1,6 @@
 ---
 template: investor-update
-used-by: [departments/finance, executives/cfo, executives/ceo]
+used-by: [finance, executives/cfo, executives/ceo]
 produces: company.os.departments['finance'].memory.investorUpdates[]
 ---
 

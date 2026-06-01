@@ -1,6 +1,6 @@
 ---
 template: unit-economics
-used-by: [departments/finance/model, departments/growth, departments/sales]
+used-by: [finance/model, growth, sales]
 produces: company.os.departments['finance'].memory.unitEconomics
 ---
 

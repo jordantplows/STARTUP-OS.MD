@@ -1,6 +1,6 @@
 ---
 template: compliance-checklist
-used-by: [departments/legal, departments/security]
+used-by: [legal, security]
 produces: company.os.departments['legal'].memory.complianceChecklists[]
 ---
 

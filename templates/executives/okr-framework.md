@@ -1,6 +1,6 @@
 ---
 template: okr-framework
-used-by: [executives/ceo, executives/cpo, executives/cto, departments/product, departments/engineering, departments/sales, departments/marketing]
+used-by: [executives/ceo, executives/cpo, executives/cto, product, engineering, sales, marketing]
 produces: company.os.departments[*].memory.okrs
 ---
 

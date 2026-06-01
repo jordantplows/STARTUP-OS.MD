@@ -1,6 +1,6 @@
 ---
 template: component-spec
-used-by: [departments/design/ui-designer, departments/design/design-systems-engineer]
+used-by: [design/ui-designer, design/design-systems-engineer]
 produces: company.os.departments['design'].memory.components[]
 ---
 

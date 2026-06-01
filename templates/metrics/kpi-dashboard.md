@@ -1,6 +1,6 @@
 ---
 template: kpi-dashboard
-used-by: [departments/metrics, executives/ceo]
+used-by: [metrics, executives/ceo]
 produces: company.os.departments['metrics'].memory.kpiDashboard
 ---
 

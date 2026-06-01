@@ -433,7 +433,7 @@ jobs:
 
 All scan reports are written to:
 - `company.os` state (events stream)
-- `departments/engineering/security/scans/` folder
+- `engineering/security/scans/` folder
 - `security-report.md` in project root (for CI)
 - Integrated into engineering dashboard
 

@@ -1,6 +1,6 @@
 ---
 template: prd
-used-by: [departments/product, executives/cpo]
+used-by: [product, executives/cpo]
 produces: company.os.departments['product'].memory.prds[]
 ---
 

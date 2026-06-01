@@ -1,6 +1,6 @@
 ---
 template: ux-flow
-used-by: [departments/design/ux-designer]
+used-by: [design/ux-designer]
 produces: company.os.departments['design'].memory.flows[]
 ---
 

@@ -331,7 +331,7 @@ function showHelp(): void {
   console.log('  startup-os init idea "Security engineers at B2B SaaS" "Teams want automation"')
   console.log('  startup-os ask "what should I work on today"')
   console.log('  startup-os status\n')
-  console.log('The .md files in executives/, departments/, red-team/, core/')
+  console.log('The .md files in ceo/, cfo/, strategy/, engineering/, etc.')
   console.log('are the agents. This runtime loads and executes them.\n')
 }
 

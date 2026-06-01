@@ -264,7 +264,7 @@ Analyze the pressure. What corners are being cut? What are the risks?`
 
 All pressure analyses are written to:
 - `company.os` state (events stream)
-- `departments/engineering/security/pressure/` folder
+- `engineering/security/pressure/` folder
 - Visible in engineering and executive dashboards
 
 This agent helps leadership make informed decisions about when to move fast and when speed is too risky.

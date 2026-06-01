@@ -253,7 +253,7 @@ Challenge the technical assumptions. What's the fatal flaw?`
 
 All challenges are written to:
 - `company.os` state (events stream)
-- `departments/engineering/security/challenges/` folder
+- `engineering/security/challenges/` folder
 - Visible in engineering dashboard
 
 This agent runs continuously, watching for new assumptions to challenge.

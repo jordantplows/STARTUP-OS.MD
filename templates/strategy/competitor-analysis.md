@@ -1,6 +1,6 @@
 ---
 template: competitor-analysis
-used-by: [departments/strategy, departments/product, departments/sales]
+used-by: [strategy, product, sales]
 produces: company.os.departments['strategy'].memory.competitorAnalysis
 ---
 

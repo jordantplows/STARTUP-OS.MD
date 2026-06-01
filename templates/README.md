@@ -124,7 +124,7 @@ Emit event so other agents can consume
 
 ## Example: Product agent creating PRD
 
-1. Agent: `departments/strategy/product-direction.md`
+1. Agent: `strategy/product-direction.md`
 2. Frontmatter includes: `template-ref: templates/product/prd.md`
 3. Agent reads `templates/product/prd.md` schema
 4. Agent populates with: problem, solution, user stories, success metrics

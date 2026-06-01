@@ -1,6 +1,6 @@
 ---
 template: sop
-used-by: [departments/operations]
+used-by: [operations]
 produces: company.os.departments['operations'].memory.sops[]
 ---
 

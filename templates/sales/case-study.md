@@ -1,6 +1,6 @@
 ---
 template: case-study
-used-by: [departments/sales, departments/marketing]
+used-by: [sales, marketing]
 produces: company.os.departments['sales'].memory.caseStudies[]
 ---
 

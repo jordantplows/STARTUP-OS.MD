@@ -1,6 +1,6 @@
 ---
 template: incident-report
-used-by: [departments/engineering, executives/cto]
+used-by: [engineering, executives/cto]
 produces: company.os.departments['engineering'].memory.incidents[]
 ---
 

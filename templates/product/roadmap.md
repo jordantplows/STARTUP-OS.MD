@@ -1,6 +1,6 @@
 ---
 template: roadmap
-used-by: [departments/product, executives/cpo, executives/ceo]
+used-by: [product, executives/cpo, executives/ceo]
 produces: company.os.departments['product'].memory.roadmap
 ---
 

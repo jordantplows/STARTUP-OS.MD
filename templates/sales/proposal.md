@@ -1,6 +1,6 @@
 ---
 template: proposal
-used-by: [departments/sales]
+used-by: [sales]
 produces: company.os.departments['sales'].memory.proposals[]
 ---
 

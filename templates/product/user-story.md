@@ -1,6 +1,6 @@
 ---
 template: user-story
-used-by: [departments/product, departments/engineering]
+used-by: [product, engineering]
 produces: company.os.departments['product'].memory.userStories[]
 ---
 

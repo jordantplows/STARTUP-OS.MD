@@ -338,7 +338,7 @@ Build threat models for the triggered changes.`
 
 All threat models are written to:
 - `company.os` state (events stream)
-- `departments/engineering/security/threat-models/` folder
+- `engineering/security/threat-models/` folder
 - Attached to feature spec before implementation begins
 
 This agent ensures security is designed in, not bolted on later.

@@ -1,6 +1,6 @@
 ---
 template: vendor-review
-used-by: [departments/operations, departments/finance]
+used-by: [operations, finance]
 produces: company.os.departments['operations'].memory.vendorReviews[]
 ---
 

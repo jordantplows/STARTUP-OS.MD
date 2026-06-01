@@ -1,6 +1,6 @@
 ---
 template: idea-canvas
-used-by: [departments/strategy, executives/ceo, executives/cpo]
+used-by: [strategy, executives/ceo, executives/cpo]
 produces: company.os.departments['strategy'].memory.ideaCanvas
 ---
 

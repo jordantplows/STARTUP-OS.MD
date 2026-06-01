@@ -1,6 +1,6 @@
 ---
 template: risk-assessment
-used-by: [departments/legal]
+used-by: [legal]
 produces: company.os.departments['legal'].memory.riskAssessments[]
 ---
 

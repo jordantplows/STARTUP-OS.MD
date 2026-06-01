@@ -1,6 +1,6 @@
 ---
 template: email-sequence
-used-by: [departments/marketing, departments/sales, departments/growth]
+used-by: [marketing, sales, growth]
 produces: company.os.departments['marketing'].memory.emailSequences[]
 ---
 

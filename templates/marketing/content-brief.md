@@ -1,6 +1,6 @@
 ---
 template: content-brief
-used-by: [departments/marketing, departments/growth]
+used-by: [marketing, growth]
 produces: company.os.departments['marketing'].memory.contentBriefs[]
 ---
 

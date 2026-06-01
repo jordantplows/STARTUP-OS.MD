@@ -1,6 +1,6 @@
 ---
 template: market-research
-used-by: [departments/strategy, executives/ceo]
+used-by: [strategy, executives/ceo]
 produces: company.os.departments['strategy'].memory.marketResearch
 ---
 

@@ -1,6 +1,6 @@
 ---
 template: sales-playbook
-used-by: [departments/sales]
+used-by: [sales]
 produces: company.os.departments['sales'].memory.playbook
 ---
 
