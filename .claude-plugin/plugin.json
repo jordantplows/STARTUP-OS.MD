@@ -1,9 +1,13 @@
 {
   "name": "startup-os",
-  "version": "1.0.0",
-  "description": "Scaffold a complete startup operating system — from idea to funded company — with a single slash command.",
-  "author": "your-org",
-  "homepage": "https://github.com/your-org/startup-os",
+  "version": "0.4.0",
+  "description": "AI-powered company operating system",
+  "author": {
+    "name": "Jordan Plows",
+    "email": "plowstjordan@gmail.com"
+  },
+  "homepage": "https://github.com/jordantplows/startup-os",
+  "repository": "https://github.com/jordantplows/startup-os",
   "license": "MIT",
   "skills": ["SKILL.md"],
   "skillHandler": "skill-handler.ts",

@@ -1,0 +1,36 @@
+{
+  "name": "startup-os",
+  "description": "An AI-powered operating system for startups. One slash command builds and runs an entire company as parallel steering agents.",
+  "owner": {
+    "name": "Jordan Plows",
+    "email": "plowstjordan@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "startup-os",
+      "displayName": "startup-os · Company OS",
+      "source": {
+        "type": "github",
+        "repo": "jordantplows/startup-os"
+      },
+      "description": "Instantiate your entire company as parallel AI agents from a single slash command.",
+      "version": "0.4.0",
+      "author": {
+        "name": "Jordan Plows",
+        "email": "plowstjordan@gmail.com"
+      },
+      "homepage": "https://github.com/jordantplows/startup-os",
+      "repository": "https://github.com/jordantplows/startup-os",
+      "license": "MIT",
+      "keywords": [
+        "startup",
+        "ai-agents",
+        "company-os",
+        "autonomous",
+        "founder",
+        "claude-code"
+      ],
+      "category": "productivity"
+    }
+  ]
+}
