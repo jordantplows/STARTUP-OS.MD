@@ -4,7 +4,7 @@ description: >
   Instantiates your entire company as parallel AI agents that watch, decide,
   and coordinate through shared state. The .md files are the agents, the
   TypeScript runtime executes them, and you are the only human.
-argument-hint: 'build "<idea>" | ask <message> | status | agents | reset | doctor <type>'
+argument-hint: 'build "<idea>" | ask <message> | status | agents | reset | debug <type>'
 ---
 
 # startup-os · company runtime
@@ -158,36 +158,36 @@ Clear all company state and start over. Deletes `.startup-os/company.os.json`.
 
 Use when pivoting or starting a new company.
 
-### /startup-os doctor <type>
+### /startup-os debug <type>
 
-Run code intelligence and health diagnostics on your codebase. The doctor system is independent of the company build — you can run it on any codebase at any time.
+Run code intelligence and health diagnostics on your codebase. The debug system is independent of the company build — you can run it on any codebase at any time.
 
-**Available doctors:**
+**Available debuggers:**
 - `react` — Diagnose React-specific issues (hooks, keys, props, effects, re-renders, a11y)
 - `typescript` — Find type safety issues (any types, unsafe casts, missing types, dead code)
 - `dependencies` — Audit packages (CVEs, outdated, unused, duplicates, peer deps)
 - `performance` — Identify bottlenecks (re-renders, bundle size, images, blocking ops, memory leaks)
 - `security` — Scan for vulnerabilities (secrets, XSS, SQL injection, weak auth, insecure deps)
-- `all` — Run all five doctors in parallel
+- `all` — Run all five debuggers in parallel
 
 **How it works:**
-1. Doctor scans your codebase (not the company state)
+1. Debugger scans your codebase (not the company state)
 2. Produces structured diagnosis report with severity levels
 3. Provides exact code fixes ready to paste
-4. Reports written to `doctor-reports/` folder
+4. Reports written to `debug-reports/` folder
 
 **Examples:**
 ```
-/startup-os doctor react
+/startup-os debug react
 → Scans all .tsx/.jsx files for React issues
-→ Outputs: doctor-reports/react-diagnosis.md
+→ Outputs: debug-reports/react-diagnosis.md
 
-/startup-os doctor security
+/startup-os debug security
 → Scans for secrets, XSS, SQL injection, auth issues
-→ Outputs: doctor-reports/security-diagnosis.md
+→ Outputs: debug-reports/security-diagnosis.md
 
-/startup-os doctor all
-→ Runs all 5 doctors in parallel
+/startup-os debug all
+→ Runs all 5 debuggers in parallel
 → Outputs: Full health report across all categories
 ```
 
@@ -198,7 +198,7 @@ Run code intelligence and health diagnostics on your codebase. The doctor system
 - After dependency updates
 - After major refactor
 
-Unlike the business agents which build your company, the doctors are pure code diagnostic tools that work on any codebase.
+Unlike the business agents which build your company, the debuggers are pure code diagnostic tools that work on any codebase.
 
 ## How the runtime works
 
@@ -207,7 +207,7 @@ Unlike the business agents which build your company, the doctors are pure code d
 `src/` runtime scans directories for `.md` files:
 - `ceo/`, `cfo/`, `cto/`, `cmo/`, `cpo/`, `coo/` → executive agents
 - `strategy/`, `product/`, `design/`, `engineering/`, `finance/`, `marketing/`, `sales/`, `people/`, `legal/`, `operations/`, `metrics/`, `security/`, `growth/`, `customer/`, `data/` → department agents
-- `doctor/` → code intelligence agents
+- `debug/` → code intelligence agents
 - `core/` → generation syscalls
 
 For each .md file:
@@ -335,12 +335,12 @@ startup-os/
 ├── growth/
 ├── customer/
 ├── data/
-├── doctor/                       ← Code intelligence agents
-│   ├── react-doctor.md
-│   ├── typescript-doctor.md
-│   ├── dependency-doctor.md
-│   ├── performance-doctor.md
-│   └── security-doctor.md
+├── debug/                        ← Code intelligence agents
+│   ├── react-debugger.md
+│   ├── typescript-debugger.md
+│   ├── dependency-debugger.md
+│   ├── performance-debugger.md
+│   └── security-debugger.md
 ├── core/                         ← Generation syscalls
 │   ├── generate-pdf.md
 │   └── ...
@@ -399,7 +399,7 @@ When you run `/startup-os build`:
 
 **Customer (2):** Customer Success, Support
 
-**Doctor (5):** React, TypeScript, Dependencies, Performance, Security
+**Debug (5):** React, TypeScript, Dependencies, Performance, Security
 
 **Core (4):** Generate PDF/CSV/HTML/SVG
 

@@ -1,21 +1,21 @@
 ---
-name: security-doctor
-role: doctor
+name: security-debugger
+role: debugger
 language: both
-triggers: [/doctor security, /doctor sec, /doctor all]
+triggers: [/debug security, /debug sec, /debug all]
 reads:
   - user's codebase (passed via context)
   - Environment variables and config files
   - API endpoints and route handlers
   - Authentication and authorization logic
 writes:
-  - diagnosis report to doctor-reports/security-diagnosis.md
+  - diagnosis report to debug-reports/security-diagnosis.md
   - exact remediation steps with code
 ---
 
-# Security Doctor
+# Security Debugger
 
-## What This Doctor Diagnoses
+## What This Debugger Diagnoses
 
 ### 1. Exposed Secrets
 - API keys in source code
@@ -507,7 +507,7 @@ app.use(session({
 
 ## Output Format
 
-The doctor writes a structured diagnosis report to `doctor-reports/security-diagnosis.md`:
+The debugger writes a structured diagnosis report to `debug-reports/security-diagnosis.md`:
 
 ```markdown
 # Security Diagnosis Report
@@ -609,8 +609,8 @@ Generated: 2026-05-31 14:23:45
 
 ## Integration
 
-The Security Doctor can be invoked:
-- Via CLI: `/doctor security` or `/doctor sec`
+The Security Debugger can be invoked:
+- Via CLI: `/debug security` or `/debug sec`
 - Pre-commit: Block commits with secrets or critical issues
 - CI/CD: Fail builds on high/critical findings
 - Scheduled: Weekly security audit

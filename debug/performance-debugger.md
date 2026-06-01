@@ -1,21 +1,21 @@
 ---
-name: performance-doctor
-role: doctor
+name: performance-debugger
+role: debugger
 language: both
-triggers: [/doctor performance, /doctor perf, /doctor all]
+triggers: [/debug performance, /debug perf, /debug all]
 reads:
   - user's codebase (passed via context)
   - React components (.tsx, .jsx files)
   - Bundle configuration (webpack, vite, etc.)
   - Image assets
 writes:
-  - diagnosis report to doctor-reports/performance-diagnosis.md
+  - diagnosis report to debug-reports/performance-diagnosis.md
   - before/after code examples
 ---
 
-# Performance Doctor
+# Performance Debugger
 
-## What This Doctor Diagnoses
+## What This Debugger Diagnoses
 
 ### 1. Unnecessary Re-renders
 - Components re-rendering when props haven't changed
@@ -492,7 +492,7 @@ function MessageList({ messages }: { messages: Message[] }) {
 
 ## Output Format
 
-The doctor writes a structured diagnosis report to `doctor-reports/performance-diagnosis.md`:
+The debugger writes a structured diagnosis report to `debug-reports/performance-diagnosis.md`:
 
 ```markdown
 # Performance Diagnosis Report
@@ -552,8 +552,8 @@ Generated: 2026-05-31 14:23:45
 
 ## Integration
 
-The Performance Doctor can be invoked:
-- Via CLI: `/doctor performance` or `/doctor perf`
+The Performance Debugger can be invoked:
+- Via CLI: `/debug performance` or `/debug perf`
 - Before release: Check performance impact of changes
 - Profiling mode: With actual runtime measurements
 - CI/CD: Fail builds that regress bundle size or metrics

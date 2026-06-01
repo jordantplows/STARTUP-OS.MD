@@ -1,20 +1,20 @@
 ---
-name: dependency-doctor
-role: doctor
+name: dependency-debugger
+role: debugger
 language: both
-triggers: [/doctor dependencies, /doctor deps, /doctor all]
+triggers: [/debug dependencies, /debug deps, /debug all]
 reads:
   - package.json
   - package-lock.json / yarn.lock / pnpm-lock.yaml
   - node_modules (for actual installed versions)
 writes:
-  - diagnosis report to doctor-reports/dependency-diagnosis.md
+  - diagnosis report to debug-reports/dependency-diagnosis.md
   - upgrade commands ready to execute
 ---
 
-# Dependency Doctor
+# Dependency Debugger
 
-## What This Doctor Diagnoses
+## What This Debugger Diagnoses
 
 ### 1. Outdated Packages
 - Major version updates available
@@ -261,7 +261,7 @@ Recommended: "axios": "^1.7.2"
 
 ## Output Format
 
-The doctor writes a structured diagnosis report to `doctor-reports/dependency-diagnosis.md`:
+The debugger writes a structured diagnosis report to `debug-reports/dependency-diagnosis.md`:
 
 ```markdown
 # Dependency Diagnosis Report
@@ -369,8 +369,8 @@ npm outdated
 
 ## Integration
 
-The Dependency Doctor can be invoked:
-- Via CLI: `/doctor dependencies` or `/doctor deps`
+The Dependency Debugger can be invoked:
+- Via CLI: `/debug dependencies` or `/debug deps`
 - Pre-merge: Before merging dependency updates
 - Weekly: Scheduled cron job for health check
 - CI/CD: Fail builds on critical CVEs

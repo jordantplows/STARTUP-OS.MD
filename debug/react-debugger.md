@@ -1,19 +1,19 @@
 ---
-name: react-doctor
-role: doctor
+name: react-debugger
+role: debugger
 language: react
-triggers: [/doctor react, /doctor all]
+triggers: [/debug react, /debug all]
 reads:
   - user's codebase (passed via context)
   - .tsx, .ts, .jsx, .js files with React imports
 writes:
-  - diagnosis report to doctor-reports/react-diagnosis.md
+  - diagnosis report to debug-reports/react-diagnosis.md
   - inline fix suggestions with exact code
 ---
 
-# React Doctor
+# React Debugger
 
-## What This Doctor Diagnoses
+## What This Debugger Diagnoses
 
 ### 1. Missing Keys in Lists
 - Lists rendered without unique `key` props
@@ -236,7 +236,7 @@ const ExpensiveChild = React.memo(({ data }: Props) => {
 
 ## Output Format
 
-The doctor writes a structured diagnosis report to `doctor-reports/react-diagnosis.md`:
+The debugger writes a structured diagnosis report to `debug-reports/react-diagnosis.md`:
 
 ```markdown
 # React Diagnosis Report
@@ -277,10 +277,10 @@ Generated: 2026-05-31 14:23:45
 
 ## Integration
 
-The React Doctor can be invoked:
-- Via CLI: `/doctor react`
+The React Debugger can be invoked:
+- Via CLI: `/debug react`
 - Pre-commit hook: Automatically on staged React files
 - CI/CD: As part of build validation
 - IDE: On-demand from editor
 
-All diagnosis reports are written to `doctor-reports/` and can be reviewed, committed, or ignored as needed.
+All diagnosis reports are written to `debug-reports/` and can be reviewed, committed, or ignored as needed.

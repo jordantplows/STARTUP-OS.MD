@@ -17,7 +17,7 @@ watches:
 
 Automated security scanning of the codebase, dependencies, and configuration. Runs daily and on every significant code change to catch vulnerabilities before they reach production.
 
-Unlike the doctor agents (which are on-demand diagnostic tools), this agent runs continuously in the background as part of the engineering security practice.
+Unlike the debug agents (which are on-demand diagnostic tools), this agent runs continuously in the background as part of the engineering security practice.
 
 ## Scans Performed
 
@@ -381,7 +381,7 @@ ${low.length > 3 ? `\n... and ${low.length - 3} more` : ''}
 - **Daily**: Full scan at 2 AM
 - **On commit**: Quick scan (secrets + critical patterns only)
 - **Pre-deployment**: Full scan blocks deployment if critical/high found
-- **On demand**: Manual trigger via `/doctor security` or startup-os command
+- **On demand**: Manual trigger via `/debug security` or startup-os command
 
 ## CI/CD Integration
 
@@ -403,7 +403,7 @@ jobs:
       - uses: actions/checkout@v3
       - run: npm install
       - run: npm audit --audit-level=high
-      - run: /doctor security
+      - run: /debug security
       - name: Block if critical
         run: |
           if grep -q "DEPLOYMENT BLOCKED" security-report.md; then

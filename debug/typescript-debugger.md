@@ -1,20 +1,20 @@
 ---
-name: typescript-doctor
-role: doctor
+name: typescript-debugger
+role: debugger
 language: typescript
-triggers: [/doctor typescript, /doctor all]
+triggers: [/debug typescript, /debug all]
 reads:
   - user's codebase (passed via context)
   - .ts, .tsx files
   - tsconfig.json
 writes:
-  - diagnosis report to doctor-reports/typescript-diagnosis.md
+  - diagnosis report to debug-reports/typescript-diagnosis.md
   - inline fix suggestions with exact code
 ---
 
-# TypeScript Doctor
+# TypeScript Debugger
 
-## What This Doctor Diagnoses
+## What This Debugger Diagnoses
 
 ### 1. Any Types
 - Explicit `any` usage
@@ -309,7 +309,7 @@ const handler: Handler = (x: number | string) => {
 
 ## Output Format
 
-The doctor writes a structured diagnosis report to `doctor-reports/typescript-diagnosis.md`:
+The debugger writes a structured diagnosis report to `debug-reports/typescript-diagnosis.md`:
 
 ```markdown
 # TypeScript Diagnosis Report
@@ -372,10 +372,10 @@ Focus on these high-impact changes:
 
 ## Integration
 
-The TypeScript Doctor can be invoked:
-- Via CLI: `/doctor typescript`
+The TypeScript Debugger can be invoked:
+- Via CLI: `/debug typescript`
 - Pre-commit hook: On staged TypeScript files
 - CI/CD: Block merges on critical issues
 - Watch mode: Continuous diagnosis during development
 
-Reports are written to `doctor-reports/` and include exact fixes ready to paste.
+Reports are written to `debug-reports/` and include exact fixes ready to paste.
