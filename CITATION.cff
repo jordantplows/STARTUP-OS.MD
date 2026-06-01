@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Startup OS"
+abstract: "Instantiates your entire company as parallel AI agents that watch, decide, and coordinate through shared state. The .md files are the agents, the TypeScript runtime executes them, and you are the only human."
+authors:
+  - family-names: "Plows"
+    given-names: "Jordan"
+repository-code: "https://github.com/jordantplows/startup-os"
+license: MIT
+version: 0.1.0
+date-released: 2026-05-31
