@@ -13,6 +13,9 @@ build/
 
 # Runtime state
 .startup-os/
+.memory/
+.audit/
+workspace/
 
 # IDE
 .vscode/

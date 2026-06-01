@@ -158,6 +158,88 @@ Clear all company state and start over. Deletes `.startup-os/company.os.json`.
 
 Use when pivoting or starting a new company.
 
+### /startup-os brief
+
+Triggers CEO morning brief immediately. Shows today's company state, pending decisions, and top priority.
+
+**Example output:**
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SecureCode · Morning Brief
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ 🎯 TOP PRIORITY
+ Talk to 2 potential customers today
+
+ 📋 TODAY'S ACTION ITEMS
+ 1. Resolve 2 blocking decisions
+ 2. Schedule customer interviews
+ 3. Review high-pain feedback
+
+ 📊 YESTERDAY
+ - 5 new customer signals detected
+ - Competitor A raised prices 20%
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### /startup-os investors
+
+Runs investor folder agents and shows fundraising readiness.
+
+**What you get:**
+- Fundraising readiness score
+- Data room completeness
+- Target investor list ranked by fit
+- What's missing before raising
+
+### /startup-os customers
+
+Runs outreach + research agents and shows customer acquisition pipeline.
+
+**What you get:**
+- Outreach sequences ready
+- Customer signal patterns
+- Community engagement opportunities
+- Competitor intel
+
+### /startup-os research "<topic>"
+
+Runs research agents on a specific question.
+
+**Examples:**
+```
+/startup-os research "competitor pricing"
+→ Analyzes competitor pricing moves and patterns
+
+/startup-os research "customer pain signals"
+→ Surfaces all customer pain signals from interviews and signals
+```
+
+### /startup-os dashboard
+
+Generates and opens the company cockpit dashboard in browser.
+
+Shows:
+- Company vitals (stage, runway, revenue)
+- All agent statuses
+- Pending decisions
+- Recent activity
+- Quick actions
+
+### /startup-os schedule
+
+Shows all scheduled agent runs and next fire times. Lets founder adjust cadences.
+
+**Example output:**
+```
+SCHEDULED AGENTS
+
+ceo-morning-brief         daily 8am      next: 2026-06-01 08:00
+research-customer-intel   daily 6am      next: 2026-06-01 06:00
+research-competitor-watch weekly Mon 7am next: 2026-06-02 07:00
+research-trend-scanner    weekly Mon 8am next: 2026-06-02 08:00
+```
+
 ### /startup-os debug <type>
 
 Run code intelligence and health diagnostics on your codebase. The debug system is independent of the company build — you can run it on any codebase at any time.
@@ -309,12 +391,41 @@ startup-os/
 ├── ceo/                          ← Executive agents (root level)
 │   ├── strategy.md
 │   ├── briefing.md
+│   ├── morning-brief.md
 │   └── ...
 ├── cfo/
+│   ├── data-room.md
+│   └── ...
 ├── cto/
 ├── cmo/
 ├── cpo/
+│   ├── feedback-loop.md
+│   ├── pricing-engine.md
+│   ├── changelog.md
+│   ├── ab-testing.md
+│   └── ...
 ├── coo/
+├── outreach/                     ← New: Outreach agents
+│   ├── cold-email.md
+│   ├── linkedin.md
+│   ├── investor-outreach.md
+│   └── community.md
+├── investor/                     ← New: Investor relations
+│   ├── pitch-deck.md
+│   ├── data-room.md
+│   ├── target-investors.md
+│   ├── narrative.md
+│   └── term-sheet.md
+├── research/                     ← New: Intelligence gathering
+│   ├── customer-intel.md
+│   ├── competitor-watch.md
+│   ├── trend-scanner.md
+│   └── interview-agent.md
+├── network/                      ← New: Relationship management
+│   ├── advisor.md
+│   ├── partnerships.md
+│   ├── press.md
+│   └── accelerator.md
 ├── strategy/                     ← Department agents (root level)
 │   ├── product-direction.md
 │   ├── mvp.md
@@ -372,15 +483,23 @@ When you run `/startup-os build`:
 12. Other agents consume events in next cycle
 13. Founder receives responses
 
-## Current agents (70+ total)
+## Current agents (95+ total)
 
-**Executives (6 folders, 34 agents total):**
-- **CEO (6 agents):** briefing, decisions, okrs, board, hiring, strategy
-- **CFO (5 agents):** model, fundraising, budget, reporting, risk
+**Executives (6 folders, 36 agents total):**
+- **CEO (7 agents):** briefing, decisions, okrs, board, hiring, strategy, morning-brief
+- **CFO (6 agents):** model, fundraising, budget, reporting, risk, data-room
 - **CMO (5 agents):** positioning, campaigns, content, demand, brand
 - **CTO (5 agents):** architecture, engineering-health, security-posture, infrastructure, build-vs-buy
-- **CPO (5 agents):** vision, roadmap, discovery, metrics, launch
+- **CPO (9 agents):** vision, roadmap, discovery, metrics, launch, feedback-loop, pricing-engine, changelog, ab-testing
 - **COO (5 agents):** operations, scaling, vendors, people-ops, process
+
+**Outreach (4):** Cold Email, LinkedIn, Investor Outreach, Community
+
+**Investor (5):** Pitch Deck, Data Room, Target Investors, Narrative, Term Sheet
+
+**Research (4):** Customer Intel, Competitor Watch, Trend Scanner, Interview Agent
+
+**Network (4):** Advisor, Partnerships, Press, Accelerator
 
 **Strategy (5):** Product Direction, Idea Canvas, Competitive Intel, Personas, MVP
 

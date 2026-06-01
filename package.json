@@ -1,15 +1,16 @@
 {
   "name": "startup-os",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "An AI-powered operating system for startups. One slash command instantiates your entire company as parallel steering agents that watch, decide, and coordinate through shared state.",
   "keywords": [
     "startup",
-    "ai",
-    "agents",
+    "ai-agents",
     "claude",
-    "business",
-    "founder",
-    "operating-system"
+    "company-os",
+    "autonomous",
+    "founder-tools",
+    "mcp",
+    "claude-code"
   ],
   "author": "Jordan Plows <jordan@plows.ai>",
   "license": "MIT",
@@ -29,14 +30,36 @@
   },
   "files": [
     "dist",
-    "stdlib",
-    "syscalls",
-    "kernel",
-    "hardware",
     ".claude",
     ".claude-plugin",
     "CLAUDE.md",
-    "README.md"
+    "README.md",
+    "ceo",
+    "cfo",
+    "cmo",
+    "cto",
+    "cpo",
+    "coo",
+    "strategy",
+    "finance",
+    "legal",
+    "design",
+    "engineering",
+    "marketing",
+    "sales",
+    "people",
+    "operations",
+    "metrics",
+    "growth",
+    "customer",
+    "data",
+    "debug",
+    "core",
+    "templates",
+    "outreach",
+    "investor",
+    "research",
+    "network"
   ],
   "scripts": {
     "build": "tsc",
@@ -48,10 +71,14 @@
     "version:major": "npm version major && npm publish --access public"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.27.0"
+    "@anthropic-ai/sdk": "^0.27.0",
+    "cron": "^3.1.7",
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
+    "@types/express": "^4.17.21",
+    "@types/cron": "^2.0.1",
     "typescript": "^5.4.0"
   },
   "engines": {

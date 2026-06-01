@@ -85,6 +85,180 @@ export interface ExecutiveState {
   signals: Signal[]
 }
 
+export interface OutreachSequence {
+  id: string
+  targetSegment: string
+  subjectLines: string[]
+  emailBodies: string[]
+  cadence: number[]
+  status: 'draft' | 'active' | 'paused'
+  stats: {
+    sent: number
+    opened: number
+    replied: number
+    booked: number
+  }
+}
+
+export interface Reply {
+  sequenceId: string
+  recipientEmail: string
+  repliedAt: string
+  content: string
+}
+
+export interface OutreachRecord {
+  sequenceId: string
+  recipientEmail: string
+  sentAt: string
+  openedAt?: string
+  repliedAt?: string
+  bookedAt?: string
+  status: 'sent' | 'opened' | 'replied' | 'booked' | 'stopped'
+}
+
+export interface Investor {
+  id: string
+  name: string
+  firm: string
+  type: 'vc' | 'angel' | 'syndicate'
+  stage: string[]
+  checkSize: { min: number; max: number }
+  thesisFocus: string[]
+  portfolioCompanies: string[]
+  location: string
+  scores: {
+    thesisFit: number
+    checkSizeMatch: number
+    portfolioSynergy: number
+    warmIntroLikelihood: number
+    total: number
+  }
+}
+
+export interface DataRoomItem {
+  category: string
+  name: string
+  status: 'available' | 'missing' | 'in-progress'
+  location?: string
+  instructions?: string
+}
+
+export interface CustomerSignal {
+  id: string
+  source: string
+  sourceUrl?: string
+  content: string
+  painPoint: string
+  language: string[]
+  painIntensity: 'low' | 'medium' | 'high'
+  relevanceScore: number
+  detectedAt: string
+}
+
+export interface CompetitorEvent {
+  id: string
+  competitor: string
+  moveType: 'pricing' | 'feature' | 'hire' | 'funding' | 'customer' | 'positioning'
+  description: string
+  impact: 'low' | 'medium' | 'high'
+  source: string
+  sourceUrl?: string
+  detectedAt: string
+}
+
+export interface Trend {
+  id: string
+  category: 'regulatory' | 'technology' | 'economic' | 'industry' | 'ecosystem'
+  description: string
+  relevance: 'tailwind' | 'headwind' | 'neutral'
+  impact: 'low' | 'medium' | 'high'
+  timeline: 'immediate' | 'near-term' | 'long-term'
+  source: string
+  sourceUrl?: string
+  detectedAt: string
+  analysis: string
+}
+
+export interface InterviewSynthesis {
+  id: string
+  interviewedAt: string
+  interviewee: {
+    role: string
+    company: string
+    segment: string
+  }
+  insights: {
+    jobsToBeDone: string[]
+    painIntensity: number
+    currentAlternatives: string[]
+    switchingCosts: string[]
+    willingnessToPay: string
+    exactLanguage: string[]
+    objections: string[]
+  }
+  synthesizedAt: string
+}
+
+export interface AdvisorRecord {
+  id: string
+  name: string
+  expertise: string[]
+  relevantExperience: string
+  warmIntroPath?: string
+  outreachDraft: string
+  status: 'identified' | 'outreach-sent' | 'conversation' | 'committed' | 'declined'
+  suggestedEquity: string
+  timeCommitment: string
+  addedAt: string
+}
+
+export interface PartnershipRecord {
+  id: string
+  companyName: string
+  partnershipType: 'distribution' | 'integration' | 'co-marketing' | 'reseller'
+  mutualBenefit: string
+  proposedStructure: string
+  proposalDraft: string
+  status: 'identified' | 'outreach-sent' | 'conversation' | 'agreed' | 'declined'
+  addedAt: string
+}
+
+export interface PressRecord {
+  id: string
+  outletName: string
+  outletType: 'publication' | 'podcast' | 'newsletter'
+  journalistName?: string
+  coverage: string[]
+  audience: string
+  pitchDraft: string
+  status: 'identified' | 'pitched' | 'responded' | 'covered' | 'declined'
+  addedAt: string
+}
+
+export interface ProgramRecord {
+  id: string
+  programName: string
+  type: 'accelerator' | 'incubator' | 'fellowship'
+  equity: string
+  funding: string
+  duration: string
+  fitScore: number
+  nextDeadline: string
+  applicationDraft: string
+  recommendation: string
+  status: 'identified' | 'applied' | 'accepted' | 'declined' | 'not-pursuing'
+  addedAt: string
+}
+
+export interface Schedule {
+  agentName: string
+  cronExpression: string
+  enabled: boolean
+  lastRun?: string | undefined
+  nextRun?: string | undefined
+}
+
 export interface CompanyOS {
   profile: StartupProfile
   executives: Record<string, ExecutiveState>
@@ -93,6 +267,40 @@ export interface CompanyOS {
   events: Event[]
   mcps: Record<string, MCPConnection>
   founderInput: FounderInput[]
+  outreach: {
+    sequences: OutreachSequence[]
+    replies: Reply[]
+    pipeline: OutreachRecord[]
+  }
+  investor: {
+    targets: Investor[]
+    dataRoom: DataRoomItem[]
+    narrative: string
+    deckVersion: string
+    processStatus: 'not-started' | 'preparing' | 'outreaching' | 'in-process' | 'closed'
+    pipeline: any[]
+  }
+  research: {
+    customerSignals: CustomerSignal[]
+    competitorMoves: CompetitorEvent[]
+    trends: Trend[]
+    interviews: InterviewSynthesis[]
+  }
+  network: {
+    advisors: AdvisorRecord[]
+    partnerships: PartnershipRecord[]
+    press: PressRecord[]
+    programs: ProgramRecord[]
+  }
+  scheduler: {
+    schedules: Schedule[]
+    lastRun: Record<string, string>
+    nextRun: Record<string, string>
+  }
+  audit: {
+    totalActions: number
+    lastEntry: string
+  }
 }
 
 // ============================================================================
@@ -140,6 +348,40 @@ export class CompanyOSManager {
       events: [],
       mcps: {},
       founderInput: [],
+      outreach: {
+        sequences: [],
+        replies: [],
+        pipeline: []
+      },
+      investor: {
+        targets: [],
+        dataRoom: [],
+        narrative: '',
+        deckVersion: '',
+        processStatus: 'not-started',
+        pipeline: []
+      },
+      research: {
+        customerSignals: [],
+        competitorMoves: [],
+        trends: [],
+        interviews: []
+      },
+      network: {
+        advisors: [],
+        partnerships: [],
+        press: [],
+        programs: []
+      },
+      scheduler: {
+        schedules: [],
+        lastRun: {},
+        nextRun: {}
+      },
+      audit: {
+        totalActions: 0,
+        lastEntry: ''
+      }
     }
   }
 
