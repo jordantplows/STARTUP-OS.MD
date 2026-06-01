@@ -1,25 +1,110 @@
-import { readFileSync, writeFileSync, existsSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
-import type {
-  CompanyOS,
-  StartupProfile,
-  DepartmentState,
-  Decision,
-  Event,
-  FounderInput,
-  Action,
-} from './types.js'
 
-const COMPANY_OS_PATH = join(process.cwd(), '.startup-os', 'company.os.json')
+// ============================================================================
+// SCHEMA
+// ============================================================================
+
+export interface StartupProfile {
+  companyName: string
+  oneline: string
+  industry: string
+  businessModel: string
+  targetCustomer: string
+  problem: string
+  stage: 'idea' | 'validating' | 'building' | 'revenue'
+  location: string
+  founders: string[]
+  revenue: number
+  fundraisingGoal: string
+  launchTarget: string
+}
+
+export interface Action {
+  type: string
+  description: string
+  timestamp: string
+  impact: string[]
+}
+
+export interface Signal {
+  type: string
+  source: string
+  payload: Record<string, unknown>
+  priority: 'low' | 'medium' | 'high' | 'critical'
+  timestamp: string
+}
+
+export interface Decision {
+  id: string
+  from: string
+  question: string
+  context: string
+  blocking: string[]
+  raisedAt: string
+  answeredAt?: string
+  answer?: string
+}
+
+export interface DepartmentState {
+  status: 'initializing' | 'watching' | 'deciding' | 'steering' | 'blocked'
+  currentFocus: string
+  lastAction: Action | null
+  pendingDecisions: Decision[]
+  memory: string[]
+  signals: Signal[]
+}
+
+export interface Event {
+  type: string
+  from: string
+  payload: Record<string, unknown>
+  timestamp: string
+  consumed: string[]
+}
+
+export interface MCPConnection {
+  connected: boolean
+  activates: string[]
+  lastUsed?: string
+  legalReviewed?: boolean
+}
+
+export interface FounderInput {
+  timestamp: string
+  message: string
+  respondedTo: string[]
+}
+
+export interface CompanyOS {
+  profile: StartupProfile
+  departments: Record<string, DepartmentState>
+  decisions: Decision[]
+  events: Event[]
+  mcps: Record<string, MCPConnection>
+  founderInput: FounderInput[]
+}
+
+// ============================================================================
+// STATE MANAGER
+// ============================================================================
+
+const STATE_DIR = join(process.cwd(), '.startup-os')
+const STATE_FILE = join(STATE_DIR, 'company.os.json')
 
 export class CompanyOSManager {
   private state: CompanyOS
 
   constructor(initialProfile?: Partial<StartupProfile>) {
-    if (existsSync(COMPANY_OS_PATH)) {
+    if (!existsSync(STATE_DIR)) {
+      mkdirSync(STATE_DIR, { recursive: true })
+    }
+
+    if (existsSync(STATE_FILE)) {
       this.state = this.load()
     } else {
       this.state = this.initialize(initialProfile)
+      this.save()
     }
   }
 
@@ -48,12 +133,12 @@ export class CompanyOSManager {
   }
 
   private load(): CompanyOS {
-    const raw = readFileSync(COMPANY_OS_PATH, 'utf-8')
+    const raw = readFileSync(STATE_FILE, 'utf-8')
     return JSON.parse(raw)
   }
 
   save(): void {
-    writeFileSync(COMPANY_OS_PATH, JSON.stringify(this.state, null, 2))
+    writeFileSync(STATE_FILE, JSON.stringify(this.state, null, 2))
   }
 
   getState(): CompanyOS {
@@ -113,13 +198,13 @@ export class CompanyOSManager {
       type: 'decision-answered',
       from: 'founder',
       payload: { decisionId, answer },
-      timestamp: new Date().toISOString(),
     })
   }
 
-  emitEvent(event: Omit<Event, 'consumed'>): void {
+  emitEvent(event: Omit<Event, 'timestamp' | 'consumed'>): void {
     this.state.events.push({
       ...event,
+      timestamp: new Date().toISOString(),
       consumed: [],
     })
     this.save()
@@ -167,8 +252,7 @@ export class CompanyOSManager {
     this.emitEvent({
       type: 'action-taken',
       from: department,
-      payload: action,
-      timestamp: new Date().toISOString(),
+      payload: { action },
     })
   }
 
@@ -185,7 +269,6 @@ export class CompanyOSManager {
       type: 'mcp-connected',
       from: 'system',
       payload: { name, activates },
-      timestamp: new Date().toISOString(),
     })
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "startup-os",
   "version": "0.3.0",
-  "description": "A programming language for companies. Instantiate parallel AI agents that watch, decide, and coordinate to run your startup.",
+  "description": "An AI-powered operating system for startups. One slash command instantiates your entire company as parallel steering agents that watch, decide, and coordinate through shared state.",
   "keywords": [
     "startup",
     "ai",
