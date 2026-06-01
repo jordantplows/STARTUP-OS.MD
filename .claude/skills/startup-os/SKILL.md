@@ -15,7 +15,7 @@ This is not a document generator. This is a company operating system.
 
 **startup-os is a programming language where .md files ARE the source code.**
 
-Each .md file in `executives/`, `departments/`, `red-team/`, and `core/` is a self-contained agent with:
+Each .md file in the department folders and `core/` is a self-contained agent with:
 - Frontmatter (name, description, role, watches)
 - Instructions (what this agent does)
 - TypeScript (how it executes)
