@@ -3,7 +3,7 @@
   "description": "An AI-powered operating system for startups. One slash command builds and runs an entire company as parallel steering agents.",
   "owner": {
     "name": "Jordan Plows",
-    "email": "plowstjordan@gmail.com"
+    "email": "jordan@plows.ai"
   },
   "plugins": [
     {
@@ -17,7 +17,7 @@
       "version": "0.4.0",
       "author": {
         "name": "Jordan Plows",
-        "email": "plowstjordan@gmail.com"
+        "email": "jordan@plows.ai"
       },
       "homepage": "https://github.com/jordantplows/startup-os",
       "repository": "https://github.com/jordantplows/startup-os",
