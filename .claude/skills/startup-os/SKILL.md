@@ -4,7 +4,7 @@ description: >
   Instantiates your entire company as parallel AI agents that watch, decide,
   and coordinate through shared state. The .md files are the agents, the
   TypeScript runtime executes them, and you are the only human.
-argument-hint: 'build "<idea>" | ask <message> | status | agents | reset'
+argument-hint: 'build "<idea>" | ask <message> | status | agents | reset | doctor <type>'
 ---
 
 # startup-os · company runtime
@@ -158,6 +158,48 @@ Clear all company state and start over. Deletes `.startup-os/company.os.json`.
 
 Use when pivoting or starting a new company.
 
+### /startup-os doctor <type>
+
+Run code intelligence and health diagnostics on your codebase. The doctor system is independent of the company build — you can run it on any codebase at any time.
+
+**Available doctors:**
+- `react` — Diagnose React-specific issues (hooks, keys, props, effects, re-renders, a11y)
+- `typescript` — Find type safety issues (any types, unsafe casts, missing types, dead code)
+- `dependencies` — Audit packages (CVEs, outdated, unused, duplicates, peer deps)
+- `performance` — Identify bottlenecks (re-renders, bundle size, images, blocking ops, memory leaks)
+- `security` — Scan for vulnerabilities (secrets, XSS, SQL injection, weak auth, insecure deps)
+- `all` — Run all five doctors in parallel
+
+**How it works:**
+1. Doctor scans your codebase (not the company state)
+2. Produces structured diagnosis report with severity levels
+3. Provides exact code fixes ready to paste
+4. Reports written to `doctor-reports/` folder
+
+**Examples:**
+```
+/startup-os doctor react
+→ Scans all .tsx/.jsx files for React issues
+→ Outputs: doctor-reports/react-diagnosis.md
+
+/startup-os doctor security
+→ Scans for secrets, XSS, SQL injection, auth issues
+→ Outputs: doctor-reports/security-diagnosis.md
+
+/startup-os doctor all
+→ Runs all 5 doctors in parallel
+→ Outputs: Full health report across all categories
+```
+
+**When to use:**
+- Pre-commit: Before committing changes
+- Pre-PR: Before creating pull request
+- Weekly: Regular code health maintenance
+- After dependency updates
+- After major refactor
+
+Unlike the business agents which build your company, the doctors are pure code diagnostic tools that work on any codebase.
+
 ## How the runtime works
 
 ### 1. Load .md agents
@@ -278,10 +320,12 @@ startup-os/
 │   │   ├── pricing.md
 │   │   └── ...
 │   └── ...
-├── red-team/                      ← Adversarial agents
-│   ├── assumption-audit.md
-│   ├── business-model.md
-│   └── ...
+├── doctor/                        ← Code intelligence agents
+│   ├── react-doctor.md
+│   ├── typescript-doctor.md
+│   ├── dependency-doctor.md
+│   ├── performance-doctor.md
+│   └── security-doctor.md
 ├── core/                          ← Generation syscalls
 │   ├── generate-pdf.md
 │   └── ...
@@ -325,6 +369,7 @@ When you run `/startup-os build`:
 **Design (3):** UI Designer, UX Designer, Brand Designer
 
 **Engineering (3):** Code Review, CI, Type Safety
+  - **Security (4):** Assumption Audit, Investor Pressure, Threat Model, Vuln Scan
 
 **Marketing (3):** GTM Strategy, Email Sequences, Content Calendar
 
@@ -338,7 +383,7 @@ When you run `/startup-os build`:
 
 **Customer (2):** Customer Success, Support
 
-**Red Team (4):** Assumption Audit, Business Model, Investor, Competitor
+**Doctor (5):** React, TypeScript, Dependencies, Performance, Security
 
 **Core (4):** Generate PDF/CSV/HTML/SVG
 
