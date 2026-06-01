@@ -335,7 +335,8 @@ function showHelp(): void {
   console.log('are the agents. This runtime loads and executes them.\n')
 }
 
-if (require.main === module) {
+// ES module: check if this file is being run directly
+if (import.meta.url === `file://${process.argv[1]}`) {
   main()
 }
 

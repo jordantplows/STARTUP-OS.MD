@@ -1,6 +1,6 @@
 {
   "name": "startup-os",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "An AI-powered operating system for startups. One slash command instantiates your entire company as parallel steering agents that watch, decide, and coordinate through shared state.",
   "keywords": [
     "startup",
@@ -65,6 +65,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "prepublishOnly": "npm run build",
+    "postinstall": "node dist/install.js",
     "start": "node dist/cli.js",
     "version:patch": "npm version patch && npm publish --access public",
     "version:minor": "npm version minor && npm publish --access public",
