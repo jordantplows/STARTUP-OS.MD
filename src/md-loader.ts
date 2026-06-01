@@ -100,7 +100,7 @@ export class MDLoader {
 
   private parseFrontmatter(content: string): AgentMetadata | null {
     const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/)
-    if (!frontmatterMatch) return null
+    if (!frontmatterMatch || !frontmatterMatch[1]) return null
 
     const frontmatterText = frontmatterMatch[1]
     const lines = frontmatterText.split('\n')
@@ -145,7 +145,7 @@ export class MDLoader {
 
   private extractTypeScript(content: string): string | null {
     const codeBlockMatch = content.match(/```typescript\n([\s\S]*?)```/)
-    if (!codeBlockMatch) return null
+    if (!codeBlockMatch || !codeBlockMatch[1]) return null
 
     return codeBlockMatch[1].trim()
   }
@@ -154,12 +154,12 @@ export class MDLoader {
     const sections = { instructions: '', coordination: '' }
 
     const instructionsMatch = content.match(/## Instructions\n([\s\S]*?)(?=\n## |\n```|$)/)
-    if (instructionsMatch) {
+    if (instructionsMatch && instructionsMatch[1]) {
       sections.instructions = instructionsMatch[1].trim()
     }
 
     const coordinationMatch = content.match(/## Coordination\n([\s\S]*?)(?=\n## |$)/)
-    if (coordinationMatch) {
+    if (coordinationMatch && coordinationMatch[1]) {
       sections.coordination = coordinationMatch[1].trim()
     }
 

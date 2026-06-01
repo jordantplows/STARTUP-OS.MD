@@ -1,16 +1,9 @@
 #!/usr/bin/env node
 
 import { CompanyOSManager } from './company-os.js'
+import { MDLoader } from './md-loader.js'
+import { MDExecutor } from './md-executor.js'
 import { routeFounderInput } from './router.js'
-import { CEOAgent } from './agents/ceo.js'
-import { LegalAgent } from './agents/legal.js'
-import { ProductAgent } from './agents/product.js'
-import { RedTeamAgent } from './agents/red-team.js'
-
-interface Agent {
-  name: string
-  run: (context: string, founderMessage?: string) => Promise<string>
-}
 
 const args = process.argv.slice(2)
 const command = args[0]
@@ -26,6 +19,11 @@ async function main(): Promise<void> {
         }
 
         await buildCompany(rest)
+        break
+      }
+
+      case 'init': {
+        await initCompany(rest)
         break
       }
 
@@ -74,24 +72,34 @@ async function buildCompany(idea: string): Promise<void> {
   console.log(`I understand you're building: ${idea}\n`)
   console.log('Before I instantiate your company, three quick questions:\n')
 
-  console.log('What stage are you at?')
-  console.log('→ just an idea / validating / building / revenue\n')
+  console.log('1. What stage are you at?')
+  console.log('   → just an idea / validating / building / revenue\n')
 
-  console.log('Who is your first customer? Be specific.')
-  console.log('→ (Type your answer)\n')
+  console.log('2. Who is your first customer? Be specific.')
+  console.log('   → (e.g., "Security engineers at Series B+ SaaS companies")\n')
 
-  console.log("What's the one thing that has to be true for this to work?")
-  console.log('→ (Type your answer)\n')
+  console.log("3. What's the one thing that has to be true for this to work?")
+  console.log('   → (Your key assumption)\n')
 
-  console.log('\nOnce you answer, run:')
-  console.log('startup-os init <stage> "<customer>" "<key-assumption>"')
+  console.log('Once you answer, run:')
+  console.log('  startup-os init <stage> "<customer>" "<assumption>"\n')
+
+  console.log('Example:')
+  console.log('  startup-os init idea "Security engineers at Series B+ SaaS" "Teams want automated pre-screening"\n')
 }
 
-async function initCompany(
-  stage: string,
-  customer: string,
-  assumption: string
-): Promise<void> {
+async function initCompany(answers: string): Promise<void> {
+  const parts = answers.match(/"[^"]+"|[^\s]+/g) || []
+  if (parts.length < 3) {
+    console.error('Usage: startup-os init <stage> "<customer>" "<assumption>"')
+    process.exit(1)
+  }
+
+  const [stageRaw, customerRaw, assumptionRaw] = parts
+  const stage = (stageRaw || '').replace(/"/g, '')
+  const customer = (customerRaw || '').replace(/"/g, '')
+  const assumption = (assumptionRaw || '').replace(/"/g, '')
+
   const os = new CompanyOSManager()
 
   let stageValue: 'idea' | 'validating' | 'building' | 'revenue' = 'idea'
@@ -113,79 +121,108 @@ async function initCompany(
   }
 
   console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
-  console.log(' Company initialized. Agents starting...')
+  console.log(' Company initialized. Loading agents...')
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
 
-  const agents = await bootAllAgents(os)
+  const loader = new MDLoader()
+  const agents = loader.loadAllAgents()
 
-  console.log('● CEO          → coordinating')
-  console.log('● Legal        → watching')
-  console.log('● Product      → defining MVP')
-  console.log('● Red Team     → challenging assumptions\n')
+  console.log(`Loaded ${agents.length} agents:\n`)
 
-  const ceo = agents.find(a => a.name === 'ceo')
-  if (ceo) {
-    const briefing = await ceo.run('Company initialization')
+  for (const agent of agents.slice(0, 10)) {
+    os.initializeDepartment(agent.metadata.name, {
+      currentFocus: 'Initializing',
+      status: 'initializing',
+    })
+    console.log(`● ${agent.metadata.name.padEnd(25)} ${agent.metadata.department}`)
+  }
+
+  if (agents.length > 10) {
+    console.log(`... and ${agents.length - 10} more\n`)
+  }
+
+  console.log('\nBooting CEO for first briefing...\n')
+
+  const ceoAgent = agents.find(a => a.metadata.name === 'ceo')
+  if (ceoAgent) {
+    const executor = new MDExecutor(os)
+    const result = await executor.execute(ceoAgent, 'Company initialization')
+
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
     console.log(` ${os.getState().profile.companyName || 'Your Company'} · CEO`)
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
-    console.log(briefing)
+
+    if (result.success && result.output) {
+      console.log(result.output)
+    } else {
+      console.log('CEO briefing not available yet.')
+    }
+
     console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
   }
 
   console.log('Your company is running.')
-  console.log('Talk to it with: startup-os ask "<your message>"')
+  console.log('Talk to it with: startup-os ask "<your message>"\n')
+  console.log('Commands:')
+  console.log('  startup-os ask "what should I work on today"')
+  console.log('  startup-os status')
+  console.log('  startup-os agents\n')
 }
 
 async function askCompany(message: string): Promise<void> {
   const os = new CompanyOSManager()
-  const agents = await bootAllAgents(os)
+  const state = os.getState()
 
   os.addFounderInput(message)
 
-  const routing = await routeFounderInput(message, os.getState())
+  console.log('\nRouting your message...\n')
 
-  console.log(`\nRouting to: ${routing.agents.join(', ')}`)
-  console.log(`Reason: ${routing.reasoning}\n`)
+  const routing = await routeFounderInput(message, state)
 
-  const responses: Array<{ agent: string; message: string }> = []
+  console.log(`→ Routing to: ${routing.agents.join(', ')}`)
+  console.log(`→ Reason: ${routing.reasoning}\n`)
 
-  if (routing.sequential) {
-    for (const agentName of routing.agents) {
-      const agent = agents.find(a => a.name === agentName)
-      if (agent) {
-        const response = await agent.run('Founder message', message)
-        responses.push({ agent: agentName, message: response })
-      }
-    }
-  } else {
-    const promises = routing.agents.map(async agentName => {
-      const agent = agents.find(a => a.name === agentName)
-      if (agent) {
-        const response = await agent.run('Founder message', message)
-        return { agent: agentName, message: response }
-      }
-      return null
-    })
+  const loader = new MDLoader()
+  loader.loadAllAgents()
 
-    const results = await Promise.all(promises)
-    responses.push(...results.filter((r): r is { agent: string; message: string } => r !== null))
+  const executor = new MDExecutor(os)
+  const agentsToRun = routing.agents
+    .map(name => loader.getAgent(name))
+    .filter((a): a is NonNullable<typeof a> => a !== undefined)
+
+  if (agentsToRun.length === 0) {
+    console.log('No agents available to respond.\n')
+    return
   }
 
-  for (const { agent, message: msg } of responses) {
-    console.log(`━━ ${agent} ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
-    console.log(msg)
-    console.log()
+  const results = await executor.executeMultiple(
+    agentsToRun,
+    'Founder message',
+    message,
+    routing.sequential
+  )
+
+  for (const result of results) {
+    if (result.success && result.output) {
+      console.log(`━━ ${result.agentName} ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
+      console.log(result.output)
+      console.log()
+    } else if (!result.success) {
+      console.log(`━━ ${result.agentName} (error) ━━━━━━━━━━━━━━━━━━━━━━━━`)
+      console.log(`Error: ${result.error}`)
+      console.log()
+    }
   }
 }
 
 async function statusBriefing(): Promise<void> {
   const os = new CompanyOSManager()
-  const agents = await bootAllAgents(os)
+  const loader = new MDLoader()
+  loader.loadAllAgents()
 
-  const ceo = agents.find(a => a.name === 'ceo')
-  if (!ceo) {
-    console.error('CEO agent not available')
+  const ceoAgent = loader.getAgent('ceo')
+  if (!ceoAgent) {
+    console.error('CEO agent not found')
     return
   }
 
@@ -193,27 +230,75 @@ async function statusBriefing(): Promise<void> {
   console.log(' Status Briefing')
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
 
-  const status = await ceo.run('Status briefing request')
+  const executor = new MDExecutor(os)
+  const result = await executor.execute(ceoAgent, 'Status briefing request')
 
-  console.log(status)
+  if (result.success && result.output) {
+    console.log(result.output)
+  } else {
+    console.log('Status briefing not available.')
+  }
+
   console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
 }
 
 async function listAgents(): Promise<void> {
   const os = new CompanyOSManager()
   const state = os.getState()
+  const loader = new MDLoader()
+  const agents = loader.loadAllAgents()
 
-  console.log(`\nACTIVE AGENTS (${Object.keys(state.departments).length} running)\n`)
+  console.log(`\nACTIVE AGENTS (${agents.length} loaded)\n`)
 
-  for (const [name, dept] of Object.entries(state.departments)) {
-    const symbol = dept.status === 'blocked' ? '○' : '●'
-    console.log(`${symbol} ${name.padEnd(15)} ${dept.status.padEnd(12)} ${dept.currentFocus}`)
+  const executives = agents.filter(a => a.metadata.department === 'executive')
+  const departments = agents.filter(a =>
+    a.metadata.department !== 'executive' &&
+    a.metadata.department !== 'red-team' &&
+    a.metadata.department !== 'core'
+  )
+  const redTeam = agents.filter(a => a.metadata.department === 'red-team')
+  const core = agents.filter(a => a.metadata.department === 'core')
+
+  if (executives.length > 0) {
+    console.log('EXECUTIVES:')
+    executives.forEach(agent => {
+      const dept = state.departments[agent.metadata.name]
+      const symbol = dept?.status === 'blocked' ? '○' : '●'
+      const status = dept?.status || 'not-init'
+      const focus = dept?.currentFocus || 'Not initialized'
+      console.log(`${symbol} ${agent.metadata.name.padEnd(20)} ${status.padEnd(12)} ${focus}`)
+    })
+    console.log()
   }
 
-  console.log('\nTalk to any agent:')
-  console.log('→ startup-os ask "legal, explain the risk you flagged"')
-  console.log('→ startup-os ask "red team, what are you challenging"')
-  console.log('→ startup-os ask "product, show me the roadmap"\n')
+  if (departments.length > 0) {
+    console.log('DEPARTMENTS:')
+    departments.slice(0, 15).forEach(agent => {
+      const dept = state.departments[agent.metadata.name]
+      const symbol = dept?.status === 'blocked' ? '○' : '●'
+      const status = dept?.status || 'not-init'
+      console.log(`${symbol} ${agent.metadata.name.padEnd(30)} ${agent.metadata.department.padEnd(15)} ${status}`)
+    })
+    if (departments.length > 15) {
+      console.log(`... and ${departments.length - 15} more`)
+    }
+    console.log()
+  }
+
+  if (redTeam.length > 0) {
+    console.log('RED TEAM:')
+    redTeam.forEach(agent => {
+      const dept = state.departments[agent.metadata.name]
+      const symbol = dept?.status === 'blocked' ? '○' : '●'
+      console.log(`${symbol} ${agent.metadata.name.padEnd(30)} ${agent.metadata.description.slice(0, 50)}`)
+    })
+    console.log()
+  }
+
+  console.log('Talk to any agent:')
+  console.log('→ startup-os ask "ceo, give me status"')
+  console.log('→ startup-os ask "legal, what are you watching"')
+  console.log('→ startup-os ask "red team, challenge my assumptions"\n')
 }
 
 async function resetCompany(): Promise<void> {
@@ -235,33 +320,23 @@ async function resetCompany(): Promise<void> {
 function showHelp(): void {
   console.log('startup-os · company runtime\n')
   console.log('Commands:')
-  console.log('  build "<idea>"        Instantiate a new company')
+  console.log('  build "<idea>"        Instantiate a new company from idea')
+  console.log('  init <answers>        Initialize with clarifying answers')
   console.log('  ask <message>         Talk to your company')
   console.log('  status                Get CEO briefing')
-  console.log('  agents                List all active agents')
+  console.log('  agents                List all loaded agents')
   console.log('  reset                 Clear company state\n')
   console.log('Example:')
-  console.log('  startup-os build "AI-powered code review for security teams"')
+  console.log('  startup-os build "AI code review for security teams"')
+  console.log('  startup-os init idea "Security engineers at B2B SaaS" "Teams want automation"')
   console.log('  startup-os ask "what should I work on today"')
   console.log('  startup-os status\n')
-}
-
-async function bootAllAgents(os: CompanyOSManager): Promise<Agent[]> {
-  const ceo = new CEOAgent(os)
-  const legal = new LegalAgent(os)
-  const product = new ProductAgent(os)
-  const redTeam = new RedTeamAgent(os)
-
-  return [
-    { name: 'ceo', run: ceo.run.bind(ceo) },
-    { name: 'legal', run: legal.run.bind(legal) },
-    { name: 'product', run: product.run.bind(product) },
-    { name: 'red-team', run: redTeam.run.bind(redTeam) },
-  ]
+  console.log('The .md files in executives/, departments/, red-team/, core/')
+  console.log('are the agents. This runtime loads and executes them.\n')
 }
 
 if (require.main === module) {
   main()
 }
 
-export { buildCompany, askCompany, statusBriefing, listAgents, resetCompany }
+export { buildCompany, initCompany, askCompany, statusBriefing, listAgents, resetCompany }

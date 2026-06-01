@@ -53,7 +53,7 @@ export class MDExecutor {
     try {
       const wrappedCode = this.wrapTypeScriptForExecution(typescript)
 
-      const func = new AsyncFunction(
+      const func = AsyncFunction(
         'os',
         'context',
         'founderMessage',
@@ -61,7 +61,7 @@ export class MDExecutor {
         'console',
         'process',
         wrappedCode
-      )
+      ) as Function
 
       return func
     } catch (error) {
@@ -142,7 +142,7 @@ export class MDExecutor {
 
       if (watchLower.includes('founder') && state.founderInput.length > 0) {
         const lastInput = state.founderInput[state.founderInput.length - 1]
-        if (!lastInput.respondedTo.includes(agent.metadata.name)) {
+        if (lastInput && !lastInput.respondedTo.includes(agent.metadata.name)) {
           return true
         }
       }
