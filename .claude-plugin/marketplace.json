@@ -14,7 +14,7 @@
         "repo": "jordantplows/startup-os"
       },
       "description": "Instantiate your entire company as parallel AI agents from a single slash command.",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "author": {
         "name": "Jordan Plows",
         "email": "jordan@plows.ai"
