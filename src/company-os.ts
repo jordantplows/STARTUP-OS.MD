@@ -548,6 +548,9 @@ export class CompanyOSManager {
       activates,
       lastUsed: new Date().toISOString(),
       legalReviewed: false,
+      activatedDepartments: activates,
+      connectedAt: new Date().toISOString(),
+      tripwire: false,
     }
     this.save()
 

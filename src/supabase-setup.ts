@@ -444,7 +444,10 @@ export async function setupSupabaseFlow(os: CompanyOSManager): Promise<boolean> 
       connected: true,
       activates: ['product', 'engineering', 'customer'],
       lastUsed: new Date().toISOString(),
-      legalReviewed: false
+      legalReviewed: false,
+      activatedDepartments: ['product', 'engineering', 'customer'],
+      connectedAt: new Date().toISOString(),
+      tripwire: false
     }
   }
 
