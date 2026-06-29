@@ -37,22 +37,22 @@ async function testDashboard() {
     currentFocus: 'Tracking burn rate and runway projections',
   })
 
-  os.initializeExecutive('cto', {
+  os.initializeExecutive('engineering/exec', {
     status: 'deciding',
     currentFocus: 'Evaluating build vs buy for ML infrastructure',
   })
 
-  os.initializeExecutive('cmo', {
+  os.initializeExecutive('marketing/exec', {
     status: 'steering',
     currentFocus: 'Testing messaging with first 10 customers',
   })
 
-  os.initializeExecutive('cpo', {
+  os.initializeExecutive('product/exec', {
     status: 'watching',
     currentFocus: 'Validating feature priorities with early users',
   })
 
-  os.initializeExecutive('coo', {
+  os.initializeExecutive('operations/exec', {
     status: 'watching',
     currentFocus: 'Setting up initial sales and support processes',
   })
@@ -165,10 +165,10 @@ async function testDashboard() {
   // Add a pending decision
   console.log('Adding pending decisions...')
   os.addDecision({
-    from: 'cfo',
+    from: 'finance/exec',
     question: 'Should we hire a full-time ML engineer now or wait until seed funding?',
     context: 'CTO needs ML expertise to build the core engine. Cost: $180k/year.',
-    blocking: ['cto', 'product']
+    blocking: ['engineering/exec', 'product/exec']
   })
 
   // Run executive coordination

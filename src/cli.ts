@@ -550,7 +550,7 @@ function showHelp(): void {
   console.log('  startup-os ask "what should I work on today"')
   console.log('  startup-os dashboard')
   console.log('  startup-os connect supabase\n')
-  console.log('The .md files in ceo/, finance/exec/, marketing/exec/, engineering/, etc.')
+  console.log('The .md files in ceo/, finance/exec/, marketing/exec/, engineering/exec/, etc.')
   console.log('are the agents. This runtime loads and executes them.\n')
 }
 
