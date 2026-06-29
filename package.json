@@ -1,5 +1,5 @@
 {
-  "name": "claude-os",
+  "name": "startup-os",
   "version": "0.5.5",
   "description": "An AI-powered operating system for startups. One slash command instantiates your entire company as parallel steering agents that watch, decide, and coordinate through shared state.",
   "keywords": [
