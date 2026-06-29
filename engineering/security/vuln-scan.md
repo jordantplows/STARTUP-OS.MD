@@ -3,7 +3,7 @@ name: engineering-security-vuln-scan
 description: Automated vulnerability scanning of codebase and dependencies
 department: engineering
 subdepartment: security
-role: scanner
+role: watching
 schedule: daily
 watches:
   - code commits

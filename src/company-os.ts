@@ -1,5 +1,6 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync, renameSync, fsyncSync, openSync, closeSync } from 'fs'
 import { join } from 'path'
+import { randomBytes } from 'crypto'
 
 // ============================================================================
 // SCHEMA

@@ -3,10 +3,18 @@ import { join, extname } from 'path'
 
 export interface AgentMetadata {
   name: string
-  description: string
-  department: string
-  role: 'steering' | 'watcher' | 'generator'
-  watches: string[]
+  description?: string
+  executive?: string
+  department?: string
+  role: 'steering' | 'watching' | 'generating' | 'watcher' | 'generator'
+  reads?: string[]
+  writes?: string[]
+  events?: {
+    emits?: string[]
+    watches?: string[]
+  }
+  watches?: string[]
+  templateRef?: string
 }
 
 export interface LoadedAgent {
@@ -24,12 +32,28 @@ export class MDLoader {
     const agents: LoadedAgent[] = []
     const rootDir = process.cwd()
 
-    const directories = [
-      join(rootDir, 'executives'),
-      join(rootDir, 'departments'),
-      join(rootDir, 'red-team'),
-      join(rootDir, 'core'),
-    ]
+    const excludedDirs = new Set([
+      'node_modules', 'dist', '.git', '.github', '.claude',
+      '.claude-plugin', 'src', 'templates', 'mcp', '.memory',
+      '.audit', 'workspace', '.startup-os', 'debug'
+    ])
+
+    const entries = readdirSync(rootDir)
+    const directories: string[] = []
+
+    for (const entry of entries) {
+      if (excludedDirs.has(entry)) continue
+
+      const fullPath = join(rootDir, entry)
+      try {
+        const stat = statSync(fullPath)
+        if (stat.isDirectory()) {
+          directories.push(fullPath)
+        }
+      } catch (error) {
+        continue
+      }
+    }
 
     for (const dir of directories) {
       try {
@@ -107,36 +131,128 @@ export class MDLoader {
 
     const metadata: Partial<AgentMetadata> = {
       watches: [],
+      reads: [],
+      writes: [],
+      events: { emits: [], watches: [] }
     }
 
-    let inWatches = false
+    let currentArrayField: 'watches' | 'reads' | 'writes' | null = null
+    let inEventsEmits = false
+    let inEventsWatches = false
 
     for (const line of lines) {
-      if (line.trim().startsWith('watches:')) {
-        inWatches = true
-        continue
-      }
+      const trimmed = line.trim()
 
-      if (inWatches) {
-        if (line.startsWith('  - ')) {
-          metadata.watches!.push(line.replace('  - ', '').trim())
-        } else if (line.trim() && !line.startsWith(' ')) {
-          inWatches = false
+      if (trimmed.startsWith('name:')) {
+        metadata.name = trimmed.replace('name:', '').trim()
+        currentArrayField = null
+        inEventsEmits = false
+        inEventsWatches = false
+      } else if (trimmed.startsWith('description:')) {
+        metadata.description = trimmed.replace('description:', '').trim()
+        currentArrayField = null
+        inEventsEmits = false
+        inEventsWatches = false
+      } else if (trimmed.startsWith('executive:')) {
+        metadata.executive = trimmed.replace('executive:', '').trim()
+        currentArrayField = null
+        inEventsEmits = false
+        inEventsWatches = false
+      } else if (trimmed.startsWith('department:')) {
+        metadata.department = trimmed.replace('department:', '').trim()
+        currentArrayField = null
+        inEventsEmits = false
+        inEventsWatches = false
+      } else if (trimmed.startsWith('role:')) {
+        metadata.role = trimmed.replace('role:', '').trim() as AgentMetadata['role']
+        currentArrayField = null
+        inEventsEmits = false
+        inEventsWatches = false
+      } else if (trimmed.startsWith('template-ref:')) {
+        metadata.templateRef = trimmed.replace('template-ref:', '').trim()
+        currentArrayField = null
+        inEventsEmits = false
+        inEventsWatches = false
+      } else if (trimmed.startsWith('watches:')) {
+        currentArrayField = 'watches'
+        inEventsEmits = false
+        inEventsWatches = false
+        // Handle inline array: watches: [item1, item2]
+        const inlineMatch = trimmed.match(/watches:\s*\[(.*)\]/)
+        if (inlineMatch && inlineMatch[1] && metadata.watches) {
+          const items = inlineMatch[1].split(',').map(s => s.trim()).filter(s => s)
+          metadata.watches.push(...items)
+          currentArrayField = null
         }
-      }
-
-      if (line.startsWith('name:')) {
-        metadata.name = line.replace('name:', '').trim()
-      } else if (line.startsWith('description:')) {
-        metadata.description = line.replace('description:', '').trim()
-      } else if (line.startsWith('department:')) {
-        metadata.department = line.replace('department:', '').trim()
-      } else if (line.startsWith('role:')) {
-        metadata.role = line.replace('role:', '').trim() as AgentMetadata['role']
+      } else if (trimmed.startsWith('reads:')) {
+        currentArrayField = 'reads'
+        inEventsEmits = false
+        inEventsWatches = false
+        // Handle inline array: reads: [item1, item2]
+        const inlineMatch = trimmed.match(/reads:\s*\[(.*)\]/)
+        if (inlineMatch && inlineMatch[1] && metadata.reads) {
+          const items = inlineMatch[1].split(',').map(s => s.trim()).filter(s => s)
+          metadata.reads.push(...items)
+          currentArrayField = null
+        }
+      } else if (trimmed.startsWith('writes:')) {
+        currentArrayField = 'writes'
+        inEventsEmits = false
+        inEventsWatches = false
+        // Handle inline array: writes: [item1, item2]
+        const inlineMatch = trimmed.match(/writes:\s*\[(.*)\]/)
+        if (inlineMatch && inlineMatch[1] && metadata.writes) {
+          const items = inlineMatch[1].split(',').map(s => s.trim()).filter(s => s)
+          metadata.writes.push(...items)
+          currentArrayField = null
+        }
+      } else if (trimmed === 'events:') {
+        currentArrayField = null
+        inEventsEmits = false
+        inEventsWatches = false
+      } else if (trimmed.startsWith('emits:') && line.startsWith('  ')) {
+        inEventsEmits = true
+        inEventsWatches = false
+        currentArrayField = null
+        // Handle inline array: emits: [item1, item2]
+        const inlineMatch = trimmed.match(/emits:\s*\[(.*)\]/)
+        if (inlineMatch && inlineMatch[1] && metadata.events?.emits) {
+          const items = inlineMatch[1].split(',').map(s => s.trim()).filter(s => s)
+          metadata.events.emits.push(...items)
+          inEventsEmits = false
+        }
+      } else if (trimmed.startsWith('watches:') && line.startsWith('  ')) {
+        inEventsWatches = true
+        inEventsEmits = false
+        currentArrayField = null
+        // Handle inline array: watches: [item1, item2]
+        const inlineMatch = trimmed.match(/watches:\s*\[(.*)\]/)
+        if (inlineMatch && inlineMatch[1] && metadata.events?.watches) {
+          const items = inlineMatch[1].split(',').map(s => s.trim()).filter(s => s)
+          metadata.events.watches.push(...items)
+          inEventsWatches = false
+        }
+      } else if (trimmed.startsWith('- ')) {
+        const value = trimmed.replace(/^-\s*/, '').trim()
+        if (inEventsEmits && metadata.events?.emits) {
+          metadata.events.emits.push(value)
+        } else if (inEventsWatches && metadata.events?.watches) {
+          metadata.events.watches.push(value)
+        } else if (currentArrayField === 'watches' && metadata.watches) {
+          metadata.watches.push(value)
+        } else if (currentArrayField === 'reads' && metadata.reads) {
+          metadata.reads.push(value)
+        } else if (currentArrayField === 'writes' && metadata.writes) {
+          metadata.writes.push(value)
+        }
+      } else if (trimmed && !trimmed.startsWith(' ') && !line.startsWith('  ')) {
+        currentArrayField = null
+        inEventsEmits = false
+        inEventsWatches = false
       }
     }
 
-    if (!metadata.name || !metadata.description || !metadata.department || !metadata.role) {
+    if (!metadata.name || !metadata.role) {
       return null
     }
 

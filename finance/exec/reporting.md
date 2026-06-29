@@ -42,6 +42,41 @@ Financial reporting serves different audiences with specific needs and formats.
 
 Produce board packs, investor updates, and cap table snapshots based on current financial model and company state.
 
+## TypeScript
+
+```typescript
+import { CompanyOS } from '../../src/company-os'
+
+export async function run(os: CompanyOS, context: string): Promise<string> {
+  const triggers = os.events.filter(e =>
+    ['quarter-end', 'board-meeting-scheduled', 'investor-requested-update', 'cap-table-change'].includes(e.type) &&
+    !e.consumed.includes('cfo-reporting')
+  )
+
+  if (triggers.length === 0) {
+    return 'No reporting triggers at this time'
+  }
+
+  const report = {
+    type: triggers[0].type,
+    timestamp: new Date().toISOString(),
+    summary: `Generated ${triggers[0].type} report`
+  }
+
+  os.events.push({
+    type: triggers[0].type === 'board-meeting-scheduled' ? 'board-pack-ready' : 'investor-update-sent',
+    from: 'cfo-reporting',
+    payload: report,
+    timestamp: new Date().toISOString(),
+    consumed: []
+  })
+
+  triggers.forEach(e => e.consumed.push('cfo-reporting'))
+
+  return JSON.stringify(report, null, 2)
+}
+```
+
 ## Coordination
 
 **Reads:**

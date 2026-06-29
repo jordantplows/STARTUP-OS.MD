@@ -465,7 +465,7 @@ async function listAgents(): Promise<void> {
       const dept = state.departments[agent.metadata.name]
       const symbol = dept?.status === 'blocked' ? '○' : '●'
       const status = dept?.status || 'not-init'
-      console.log(`${symbol} ${agent.metadata.name.padEnd(30)} ${agent.metadata.department.padEnd(15)} ${status}`)
+      console.log(`${symbol} ${agent.metadata.name.padEnd(30)} ${(agent.metadata.department || 'unknown').padEnd(15)} ${status}`)
     })
     if (departments.length > 15) {
       console.log(`... and ${departments.length - 15} more`)
@@ -478,7 +478,7 @@ async function listAgents(): Promise<void> {
     redTeam.forEach(agent => {
       const dept = state.departments[agent.metadata.name]
       const symbol = dept?.status === 'blocked' ? '○' : '●'
-      console.log(`${symbol} ${agent.metadata.name.padEnd(30)} ${agent.metadata.description.slice(0, 50)}`)
+      console.log(`${symbol} ${agent.metadata.name.padEnd(30)} ${(agent.metadata.description || '').slice(0, 50)}`)
     })
     console.log()
   }

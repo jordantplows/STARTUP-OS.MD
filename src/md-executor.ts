@@ -128,11 +128,12 @@ export class MDExecutor {
   }
 
   shouldAgentExecute(agent: LoadedAgent, state: CompanyOS): boolean {
-    if (agent.metadata.watches.length === 0) {
+    const watches = agent.metadata.watches || agent.metadata.events?.watches || []
+    if (watches.length === 0) {
       return false
     }
 
-    for (const watch of agent.metadata.watches) {
+    for (const watch of watches) {
       const watchLower = watch.toLowerCase()
 
       if (watchLower.includes('decision') && state.decisions.some(d => !d.answer)) {
