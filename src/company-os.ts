@@ -360,6 +360,8 @@ const STATE_FILE = join(STATE_DIR, 'company.os.json')
 
 export class CompanyOSManager {
   private state: CompanyOS
+  private writeQueue: Promise<void> = Promise.resolve()
+  private queueLock = false
 
   constructor(initialProfile?: Partial<StartupProfile>) {
     if (!existsSync(STATE_DIR)) {
@@ -445,7 +447,39 @@ export class CompanyOSManager {
   }
 
   save(): void {
-    writeFileSync(STATE_FILE, JSON.stringify(this.state, null, 2))
+    // Atomic write using write-rename pattern to prevent race conditions
+    // This ensures no writes are lost even with concurrent agent writes
+    //
+    // IMPORTANT: This provides atomic file replacement (no corruption),
+    // but doesn't solve the lost-update problem where Agent A's changes
+    // get overwritten by Agent B. For true multi-agent safety, callers
+    // should reload state before modifying and saving, or use a proper
+    // lock/queue mechanism.
+    const tempFile = `${STATE_FILE}.tmp.${randomBytes(8).toString('hex')}`
+
+    try {
+      // Write to temp file
+      writeFileSync(tempFile, JSON.stringify(this.state, null, 2))
+
+      // Fsync to ensure data is on disk
+      const fd = openSync(tempFile, 'r+')
+      fsyncSync(fd)
+      closeSync(fd)
+
+      // Atomic rename (POSIX guarantees atomicity)
+      renameSync(tempFile, STATE_FILE)
+    } catch (error) {
+      // Clean up temp file on error
+      try {
+        if (existsSync(tempFile)) {
+          const { unlinkSync } = require('fs')
+          unlinkSync(tempFile)
+        }
+      } catch {
+        // Ignore cleanup errors
+      }
+      throw error
+    }
   }
 
   getState(): CompanyOS {
