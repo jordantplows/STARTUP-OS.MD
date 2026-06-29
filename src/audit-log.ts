@@ -8,6 +8,15 @@ import { join } from 'path'
 const AUDIT_DIR = join(process.cwd(), '.audit')
 const AUDIT_LOG_PATH = join(AUDIT_DIR, 'log.jsonl')
 
+export interface OutboundAction {
+  channel: 'email' | 'slack' | 'social' | 'sms' | 'webhook'
+  recipient?: string
+  contentPreview: string
+  status: 'sent' | 'pending-approval' | 'failed'
+  approvedBy?: string
+  sentAt?: string
+}
+
 export interface AuditEntry {
   timestamp: string
   agent: string
@@ -17,6 +26,7 @@ export interface AuditEntry {
   founderApproved: boolean
   confidence: 'low' | 'medium' | 'high'
   tripwired?: boolean
+  outbound?: OutboundAction
 }
 
 /**
@@ -185,4 +195,35 @@ export function getPendingTripwired(): AuditEntry[] {
     )
     return !approvalExists
   })
+}
+
+/**
+ * Returns all outbound actions (emails, messages, posts, etc.)
+ */
+export function getOutboundActions(filter?: {
+  channel?: string
+  status?: string
+  since?: string
+  department?: string
+}): AuditEntry[] {
+  const queryFilter: any = {}
+  if (filter?.since) {
+    queryFilter.since = filter.since
+  }
+
+  let entries = query(queryFilter)
+
+  // Filter to only outbound actions
+  entries = entries.filter(e => e.outbound)
+
+  if (filter) {
+    if (filter.channel) {
+      entries = entries.filter(e => e.outbound?.channel === filter.channel)
+    }
+    if (filter.status) {
+      entries = entries.filter(e => e.outbound?.status === filter.status)
+    }
+  }
+
+  return entries
 }

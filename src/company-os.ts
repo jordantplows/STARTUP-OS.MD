@@ -265,6 +265,41 @@ export interface Schedule {
   nextRun?: string | undefined
 }
 
+export interface PMFEvidence {
+  source: string
+  signal: string
+  direction: 'supports' | 'contradicts'
+  timestamp: string
+}
+
+export interface PMFTracking {
+  hypothesis: string
+  confidence: number
+  evidence: PMFEvidence[]
+  lastUpdated: string
+  nextValidationStep: string
+}
+
+export interface ExecutiveConflict {
+  between: string[]
+  issue: string
+  resolution: 'ceo-decided' | 'escalated-to-founder'
+  decidedBy?: string
+  outcome?: string
+}
+
+export interface ExecutiveSynergy {
+  between: string[]
+  insight: string
+}
+
+export interface ExecutiveSync {
+  timestamp: string
+  conflicts: ExecutiveConflict[]
+  synergies: ExecutiveSynergy[]
+  pmfSignal: string
+}
+
 export interface CompanyOS {
   profile: StartupProfile
   executives: Record<string, ExecutiveState>
@@ -277,6 +312,8 @@ export interface CompanyOS {
     reason: string
     department: string
   }
+  pmf: PMFTracking
+  executiveSync?: ExecutiveSync
   founderInput: FounderInput[]
   outreach: {
     sequences: OutreachSequence[]
@@ -357,6 +394,13 @@ export class CompanyOSManager {
       decisions: [],
       events: [],
       mcps: {},
+      pmf: {
+        hypothesis: 'Customers need a solution for [problem]',
+        confidence: 0,
+        evidence: [],
+        lastUpdated: new Date().toISOString(),
+        nextValidationStep: 'Conduct first customer interviews to validate problem'
+      },
       founderInput: [],
       outreach: {
         sequences: [],

@@ -5,6 +5,7 @@ import { MDLoader } from './md-loader.js'
 import { MDExecutor } from './md-executor.js'
 import { routeFounderInput } from './router.js'
 import { setupSupabaseFlow, connectExistingSupabase } from './supabase-setup.js'
+import { writeDashboard, openDashboard } from './dashboard.js'
 
 const args = process.argv.slice(2)
 const command = args[0]
@@ -61,6 +62,11 @@ async function main(): Promise<void> {
         }
 
         await connectService(rest)
+        break
+      }
+
+      case 'dashboard': {
+        await showDashboard()
         break
       }
 
@@ -512,6 +518,21 @@ async function connectService(service: string): Promise<void> {
   }
 }
 
+async function showDashboard(): Promise<void> {
+  const os = new CompanyOSManager()
+
+  console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+  console.log(' Generating founder dashboard...')
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
+
+  writeDashboard(os)
+
+  console.log('✓ Dashboard generated')
+  console.log('✓ Opening in browser...\n')
+
+  openDashboard()
+}
+
 function showHelp(): void {
   console.log('startup-os · company runtime\n')
   console.log('Commands:')
@@ -520,12 +541,14 @@ function showHelp(): void {
   console.log('  ask <message>         Talk to your company')
   console.log('  status                Get CEO briefing')
   console.log('  agents                List all loaded agents')
+  console.log('  dashboard             Open founder dashboard')
   console.log('  connect <service>     Connect external service (supabase)')
   console.log('  reset                 Clear company state\n')
   console.log('Example:')
   console.log('  startup-os build "AI code review for security teams"')
   console.log('  startup-os init idea "Security engineers at B2B SaaS" "Teams want automation"')
   console.log('  startup-os ask "what should I work on today"')
+  console.log('  startup-os dashboard')
   console.log('  startup-os connect supabase\n')
   console.log('The .md files in ceo/, cfo/, strategy/, engineering/, etc.')
   console.log('are the agents. This runtime loads and executes them.\n')

@@ -1,286 +1,531 @@
-import { CompanyOSManager, DepartmentState, ExecutiveState, Decision, Event } from './company-os.js'
-import { stats as getAuditStats } from './audit-log.js'
 import { writeFileSync, mkdirSync, existsSync } from 'fs'
 import { join } from 'path'
+import { CompanyOSManager } from './company-os.js'
+import { getOutboundActions, stats } from './audit-log.js'
+import { execSync } from 'child_process'
 
-// ============================================================================
-// DASHBOARD GENERATOR
-// ============================================================================
+const WORKSPACE_DIR = join(process.cwd(), 'workspace')
+const DASHBOARD_PATH = join(WORKSPACE_DIR, 'dashboard.html')
 
 /**
- * Generates the founder's company cockpit as HTML
+ * Generates the founder dashboard HTML
  */
-export function generate(os: CompanyOSManager): string {
+export function generateDashboard(os: CompanyOSManager): string {
   const state = os.getState()
-  const auditStats = getAuditStats()
+  const auditStats = stats()
+  const outbound = getOutboundActions({})
 
   const html = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${state.profile.companyName} — Dashboard</title>
+  <title>${state.profile.companyName} — Founder Dashboard</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background: #0a0a0a;
-      color: #e5e5e5;
+      color: #e0e0e0;
       padding: 20px;
+      line-height: 1.6;
     }
     .container { max-width: 1400px; margin: 0 auto; }
-    header {
-      margin-bottom: 40px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #333;
+    h1 { font-size: 24px; font-weight: 600; margin-bottom: 8px; color: #fff; }
+    h2 { font-size: 18px; font-weight: 600; margin-bottom: 16px; color: #fff; border-bottom: 2px solid #333; padding-bottom: 8px; }
+    .subtitle { color: #888; font-size: 14px; margin-bottom: 32px; }
+
+    /* PMF Tracker */
+    .pmf-tracker {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border: 2px solid #0f3460;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
     }
-    h1 { font-size: 32px; margin-bottom: 8px; }
-    .subtitle { color: #888; font-size: 14px; }
+    .pmf-hypothesis {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      color: #4ecca3;
+    }
+    .confidence-bar {
+      height: 32px;
+      background: #1a1a2e;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .confidence-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4ecca3 0%, #00d4ff 100%);
+      transition: width 0.3s ease;
+      display: flex;
+      align-items: center;
+      padding-left: 16px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .evidence-list {
+      display: grid;
+      gap: 12px;
+    }
+    .evidence-item {
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      border-left: 4px solid;
+    }
+    .evidence-item.supports { border-left-color: #4ecca3; }
+    .evidence-item.contradicts { border-left-color: #ff6b6b; }
+    .evidence-meta {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    .evidence-signal {
+      font-size: 14px;
+      color: #e0e0e0;
+    }
+    .next-step {
+      margin-top: 16px;
+      padding: 16px;
+      background: rgba(78, 204, 163, 0.1);
+      border-radius: 8px;
+      border: 1px solid #4ecca3;
+    }
+    .next-step-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #4ecca3;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px; }
+    /* Executive Row */
+    .executive-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .exec-card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 16px;
+      transition: border-color 0.2s;
+    }
+    .exec-card:hover {
+      border-color: #4ecca3;
+    }
+    .exec-name {
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #4ecca3;
+      margin-bottom: 8px;
+    }
+    .exec-status {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .exec-status.watching { background: #0f3460; color: #4ecca3; }
+    .exec-status.deciding { background: #533483; color: #a594f9; }
+    .exec-status.steering { background: #00d4ff; color: #0a0a0a; }
+    .exec-status.blocked { background: #ff6b6b; color: #fff; }
+    .exec-focus {
+      font-size: 13px;
+      color: #bbb;
+      margin-bottom: 4px;
+    }
+    .exec-action {
+      font-size: 12px;
+      color: #888;
+    }
 
-    .card {
-      background: #111;
-      border: 1px solid #222;
+    /* Outbound Activity */
+    .outbound-section {
+      background: #1a1a1a;
+      border: 1px solid #333;
       border-radius: 8px;
       padding: 24px;
+      margin-bottom: 32px;
     }
-    .card h2 {
-      font-size: 18px;
-      margin-bottom: 16px;
-      color: #fff;
-    }
-    .metric {
+    .outbound-filters {
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 12px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #1a1a1a;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
     }
-    .metric:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .metric-label { color: #888; font-size: 14px; }
-    .metric-value { color: #fff; font-size: 20px; font-weight: 600; }
-
-    .status {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
+    .filter-btn {
+      padding: 8px 16px;
+      background: #0a0a0a;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #e0e0e0;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
     }
-    .status.watching { background: #1a3a5a; color: #6eb4ff; }
-    .status.deciding { background: #5a4a1a; color: #ffc966; }
-    .status.steering { background: #3a5a1a; color: #9fff66; }
-    .status.blocked { background: #5a1a1a; color: #ff6666; }
-
-    .agent-list { list-style: none; }
-    .agent-list li {
-      padding: 12px 0;
-      border-bottom: 1px solid #1a1a1a;
+    .filter-btn:hover {
+      border-color: #4ecca3;
+      background: rgba(78, 204, 163, 0.1);
+    }
+    .filter-btn.active {
+      background: #4ecca3;
+      color: #0a0a0a;
+      border-color: #4ecca3;
+    }
+    .outbound-list {
+      display: grid;
+      gap: 12px;
+    }
+    .outbound-item {
+      padding: 16px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      border-left: 4px solid;
+    }
+    .outbound-item.email { border-left-color: #00d4ff; }
+    .outbound-item.slack { border-left-color: #4ecca3; }
+    .outbound-item.social { border-left-color: #a594f9; }
+    .outbound-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-    .agent-list li:last-child { border-bottom: none; }
-
-    .activity-feed { list-style: none; }
-    .activity-item {
-      padding: 12px;
       margin-bottom: 8px;
-      background: #0a0a0a;
-      border-left: 3px solid #333;
+    }
+    .outbound-meta {
+      font-size: 12px;
+      color: #888;
+    }
+    .outbound-status {
+      display: inline-block;
+      padding: 4px 8px;
       border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
     }
-    .activity-item .time { color: #666; font-size: 12px; }
-    .activity-item .action { color: #fff; margin-top: 4px; }
+    .outbound-status.sent { background: #4ecca3; color: #0a0a0a; }
+    .outbound-status.pending-approval { background: #ff6b6b; color: #fff; }
+    .outbound-status.failed { background: #333; color: #888; }
+    .outbound-preview {
+      font-size: 13px;
+      color: #bbb;
+      margin-top: 8px;
+      font-style: italic;
+    }
 
-    .decision-card {
-      background: #1a1a0a;
-      border-left: 3px solid #ffc966;
-      padding: 16px;
-      margin-bottom: 12px;
-      border-radius: 4px;
+    /* Department Grid */
+    .department-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
     }
-    .decision-card .question { color: #fff; font-weight: 600; margin-bottom: 8px; }
-    .decision-card .from { color: #888; font-size: 12px; }
-
-    .quick-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .btn {
-      padding: 12px 24px;
+    .dept-card {
       background: #1a1a1a;
       border: 1px solid #333;
-      border-radius: 6px;
-      color: #fff;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 600;
+      border-radius: 8px;
+      padding: 16px;
+      cursor: pointer;
       transition: all 0.2s;
     }
-    .btn:hover {
-      background: #222;
-      border-color: #444;
+    .dept-card:hover {
+      border-color: #4ecca3;
+      transform: translateY(-2px);
     }
-    .btn-primary {
-      background: #0ea5e9;
-      border-color: #0ea5e9;
+    .dept-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e0e0e0;
+      margin-bottom: 8px;
     }
-    .btn-primary:hover {
-      background: #0284c7;
-      border-color: #0284c7;
+
+    /* Pending Decisions */
+    .decisions-section {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .decision-item {
+      padding: 16px;
+      background: rgba(255, 107, 107, 0.1);
+      border-left: 4px solid #ff6b6b;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .decision-question {
+      font-size: 15px;
+      font-weight: 500;
+      color: #e0e0e0;
+      margin-bottom: 8px;
+    }
+    .decision-from {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    .decision-blocking {
+      font-size: 12px;
+      color: #ff6b6b;
+    }
+
+    /* Executive Sync */
+    .exec-sync {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .conflict-item {
+      padding: 16px;
+      background: rgba(255, 107, 107, 0.1);
+      border-left: 4px solid #ff6b6b;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .synergy-item {
+      padding: 16px;
+      background: rgba(78, 204, 163, 0.1);
+      border-left: 4px solid #4ecca3;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #666;
+      padding: 40px;
+      font-size: 14px;
+    }
+
+    .refresh-indicator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #4ecca3;
+      color: #0a0a0a;
+      padding: 12px 20px;
+      border-radius: 24px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(78, 204, 163, 0.3);
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <h1>${state.profile.companyName}</h1>
-      <div class="subtitle">Company Operating System Dashboard</div>
-    </header>
+    <h1>${state.profile.companyName}</h1>
+    <p class="subtitle">Founder Dashboard · Last updated: ${new Date().toLocaleString()}</p>
 
-    <div class="grid">
-      <!-- Company Vitals -->
-      <div class="card">
-        <h2>Company Vitals</h2>
-        <div class="metric">
-          <span class="metric-label">Stage</span>
-          <span class="metric-value">${state.profile.stage}</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Revenue</span>
-          <span class="metric-value">$${state.profile.revenue.toLocaleString()}</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Fundraising Goal</span>
-          <span class="metric-value">${state.profile.fundraisingGoal}</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Founders</span>
-          <span class="metric-value">${state.profile.founders.length || 0}</span>
+    <!-- PMF Tracker -->
+    <div class="pmf-tracker">
+      <h2>Product-Market Fit Tracker</h2>
+      <div class="pmf-hypothesis">${state.pmf.hypothesis}</div>
+      <div class="confidence-bar">
+        <div class="confidence-fill" style="width: ${state.pmf.confidence}%">
+          ${state.pmf.confidence}% confidence
         </div>
       </div>
+      <div class="evidence-list">
+        ${state.pmf.evidence.slice(-5).reverse().map(e => `
+          <div class="evidence-item ${e.direction}">
+            <div class="evidence-meta">${e.source} · ${new Date(e.timestamp).toLocaleDateString()}</div>
+            <div class="evidence-signal">${e.signal}</div>
+          </div>
+        `).join('')}
+        ${state.pmf.evidence.length === 0 ? '<div class="empty-state">No PMF evidence yet</div>' : ''}
+      </div>
+      <div class="next-step">
+        <div class="next-step-label">Next Validation Step</div>
+        <div>${state.pmf.nextValidationStep}</div>
+      </div>
+    </div>
 
-      <!-- System Activity -->
-      <div class="card">
-        <h2>System Activity</h2>
-        <div class="metric">
-          <span class="metric-label">Total Actions</span>
-          <span class="metric-value">${auditStats.totalActions}</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Tripwired Actions</span>
-          <span class="metric-value">${auditStats.tripwiredActions}</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Founder Approved</span>
-          <span class="metric-value">${auditStats.founderApprovedActions}</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Active Events</span>
-          <span class="metric-value">${state.events.length}</span>
+    <!-- Executive Row -->
+    <h2>Executive Team</h2>
+    <div class="executive-row">
+      ${['ceo', 'cfo', 'cto', 'cmo', 'cpo', 'coo'].map(exec => {
+        const execState = state.executives[exec]
+        if (!execState) return `
+          <div class="exec-card">
+            <div class="exec-name">${exec.toUpperCase()}</div>
+            <div class="exec-status watching">Initializing</div>
+            <div class="exec-focus">Not yet active</div>
+          </div>
+        `
+        return `
+          <div class="exec-card">
+            <div class="exec-name">${exec.toUpperCase()}</div>
+            <div class="exec-status ${execState.status}">${execState.status}</div>
+            <div class="exec-focus">${execState.currentFocus}</div>
+            ${execState.lastAction ? `
+              <div class="exec-action">Last: ${execState.lastAction.description}</div>
+            ` : ''}
+          </div>
+        `
+      }).join('')}
+    </div>
+
+    <!-- Executive Sync -->
+    ${state.executiveSync ? `
+      <div class="exec-sync">
+        <h2>Executive Coordination</h2>
+        ${state.executiveSync.conflicts.length > 0 ? `
+          <h3 style="font-size: 14px; color: #ff6b6b; margin-bottom: 12px;">Conflicts</h3>
+          ${state.executiveSync.conflicts.map(c => `
+            <div class="conflict-item">
+              <strong>${c.between.join(' vs ')}</strong>
+              <div style="margin-top: 4px; font-size: 13px;">${c.issue}</div>
+              <div style="margin-top: 4px; font-size: 12px; color: #888;">Resolution: ${c.resolution}</div>
+            </div>
+          `).join('')}
+        ` : ''}
+        ${state.executiveSync.synergies.length > 0 ? `
+          <h3 style="font-size: 14px; color: #4ecca3; margin-bottom: 12px; margin-top: 20px;">Synergies</h3>
+          ${state.executiveSync.synergies.map(s => `
+            <div class="synergy-item">
+              <strong>${s.between.join(' + ')}</strong>
+              <div style="margin-top: 4px; font-size: 13px;">${s.insight}</div>
+            </div>
+          `).join('')}
+        ` : ''}
+        <div style="margin-top: 20px; padding: 12px; background: rgba(78, 204, 163, 0.1); border-radius: 6px;">
+          <strong style="font-size: 13px; color: #4ecca3;">PMF Signal:</strong>
+          <span style="font-size: 13px; color: #e0e0e0; margin-left: 8px;">${state.executiveSync.pmfSignal}</span>
         </div>
       </div>
+    ` : ''}
 
-      <!-- Pending Decisions -->
-      <div class="card">
-        <h2>Pending Decisions</h2>
-        ${state.decisions.filter((d: Decision) => !d.answer).length === 0
-          ? '<p style="color: #666;">No pending decisions</p>'
-          : state.decisions.filter((d: Decision) => !d.answer).slice(0, 3).map((d: Decision) => `
-              <div class="decision-card">
-                <div class="question">${d.question}</div>
-                <div class="from">From: ${d.from}</div>
+    <!-- Outbound Activity -->
+    <div class="outbound-section">
+      <h2>Outbound Activity</h2>
+      <div class="outbound-filters">
+        <button class="filter-btn active" onclick="filterOutbound('all')">All</button>
+        <button class="filter-btn" onclick="filterOutbound('email')">Email</button>
+        <button class="filter-btn" onclick="filterOutbound('slack')">Slack</button>
+        <button class="filter-btn" onclick="filterOutbound('social')">Social</button>
+      </div>
+      <div class="outbound-list">
+        ${outbound.slice(-20).reverse().map(entry => {
+          if (!entry.outbound) return ''
+          const ob = entry.outbound
+          return `
+            <div class="outbound-item ${ob.channel}" data-channel="${ob.channel}">
+              <div class="outbound-header">
+                <div class="outbound-meta">
+                  <strong>${entry.agent}</strong> · ${ob.channel}
+                  ${ob.recipient ? ` → ${ob.recipient}` : ''}
+                  · ${new Date(entry.timestamp).toLocaleString()}
+                </div>
+                <span class="outbound-status ${ob.status}">${ob.status.replace('-', ' ')}</span>
               </div>
-            `).join('')
-        }
+              <div class="outbound-preview">"${ob.contentPreview}"</div>
+            </div>
+          `
+        }).join('')}
+        ${outbound.length === 0 ? '<div class="empty-state">No outbound activity yet</div>' : ''}
       </div>
     </div>
 
-    <!-- Agent Status -->
-    <div class="card" style="margin-bottom: 40px;">
-      <h2>Active Agents</h2>
-      <ul class="agent-list">
-        ${Object.entries(state.departments).map(([name, dept]: [string, DepartmentState]) => `
-          <li>
-            <div>
-              <strong>${name}</strong>
-              <div style="color: #666; font-size: 12px; margin-top: 4px;">${dept.currentFocus}</div>
-            </div>
-            <span class="status ${dept.status}">${dept.status}</span>
-          </li>
-        `).join('')}
-        ${Object.entries(state.executives).map(([name, exec]: [string, ExecutiveState]) => `
-          <li>
-            <div>
-              <strong>${name}</strong>
-              <div style="color: #666; font-size: 12px; margin-top: 4px;">${exec.currentFocus}</div>
-            </div>
-            <span class="status ${exec.status}">${exec.status}</span>
-          </li>
-        `).join('')}
-      </ul>
+    <!-- Pending Decisions -->
+    <div class="decisions-section">
+      <h2>Pending Decisions</h2>
+      ${state.decisions.filter(d => !d.answer).map(d => `
+        <div class="decision-item">
+          <div class="decision-question">${d.question}</div>
+          <div class="decision-from">From: ${d.from}</div>
+          ${d.blocking.length > 0 ? `
+            <div class="decision-blocking">Blocking: ${d.blocking.join(', ')}</div>
+          ` : ''}
+        </div>
+      `).join('')}
+      ${state.decisions.filter(d => !d.answer).length === 0 ? '<div class="empty-state">No pending decisions</div>' : ''}
     </div>
 
-    <!-- Recent Activity -->
-    <div class="card" style="margin-bottom: 40px;">
-      <h2>Recent Activity</h2>
-      <ul class="activity-feed">
-        ${state.events.slice(-10).reverse().map((event: Event) => `
-          <li class="activity-item">
-            <div class="time">${new Date(event.timestamp).toLocaleString()}</div>
-            <div class="action"><strong>${event.from}</strong> → ${event.type}</div>
-          </li>
-        `).join('')}
-      </ul>
+    <!-- Department Grid -->
+    <h2>All Departments</h2>
+    <div class="department-grid">
+      ${Object.entries(state.departments).map(([name, dept]) => `
+        <div class="dept-card">
+          <div class="dept-name">${name}</div>
+          <div class="exec-status ${dept.status}">${dept.status}</div>
+          <div class="exec-focus">${dept.currentFocus}</div>
+        </div>
+      `).join('')}
     </div>
 
-    <!-- Quick Actions -->
-    <div class="card">
-      <h2>Quick Actions</h2>
-      <div class="quick-actions">
-        <a href="#" class="btn btn-primary">Talk to CEO</a>
-        <a href="#" class="btn">Run Doctor</a>
-        <a href="#" class="btn">View Status</a>
-        <a href="#" class="btn">Morning Brief</a>
-        <a href="#" class="btn">Investor Dashboard</a>
-      </div>
+    <div class="refresh-indicator">
+      ⚡ Auto-refreshes on state changes
     </div>
   </div>
+
+  <script>
+    function filterOutbound(channel) {
+      const items = document.querySelectorAll('.outbound-item');
+      const buttons = document.querySelectorAll('.filter-btn');
+
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      items.forEach(item => {
+        if (channel === 'all' || item.dataset.channel === channel) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    // Auto-refresh every 30 seconds
+    setTimeout(() => {
+      window.location.reload();
+    }, 30000);
+  </script>
 </body>
 </html>`
 
-  // Write to workspace
-  const workspaceDir = join(process.cwd(), 'workspace')
-  if (!existsSync(workspaceDir)) {
-    mkdirSync(workspaceDir, { recursive: true })
+  return html
+}
+
+/**
+ * Writes the dashboard to disk
+ */
+export function writeDashboard(os: CompanyOSManager): void {
+  if (!existsSync(WORKSPACE_DIR)) {
+    mkdirSync(WORKSPACE_DIR, { recursive: true })
   }
 
-  const dashboardPath = join(workspaceDir, 'dashboard.html')
-  writeFileSync(dashboardPath, html)
-
-  console.log(`[dashboard] Generated dashboard at ${dashboardPath}`)
-
-  return dashboardPath
+  const html = generateDashboard(os)
+  writeFileSync(DASHBOARD_PATH, html, 'utf-8')
 }
 
 /**
  * Opens the dashboard in the default browser
  */
-export function open(os: CompanyOSManager): void {
-  const dashboardPath = generate(os)
-
-  const { exec } = require('child_process')
-  const command = process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open'
-
-  exec(`${command} ${dashboardPath}`, (error: Error | null) => {
-    if (error) {
-      console.error('[dashboard] Error opening dashboard:', error)
-    } else {
-      console.log('[dashboard] Opened in browser')
+export function openDashboard(): void {
+  const platform = process.platform
+  try {
+    if (platform === 'darwin') {
+      execSync(`open "${DASHBOARD_PATH}"`)
+    } else if (platform === 'linux') {
+      execSync(`xdg-open "${DASHBOARD_PATH}"`)
+    } else if (platform === 'win32') {
+      execSync(`start "${DASHBOARD_PATH}"`)
     }
-  })
+  } catch (error) {
+    console.log(`\nDashboard generated at: ${DASHBOARD_PATH}`)
+    console.log('Open it manually in your browser.')
+  }
 }
