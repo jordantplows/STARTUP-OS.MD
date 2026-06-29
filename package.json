@@ -12,7 +12,9 @@
     "claude",
     "memory",
     "multi-agent",
-    "parallel-agents"
+    "parallel-agents",
+    "ai-tools",
+    "automomous-starupt"
   ],
   "author": "Jordan Plows <jordan@plows.ai>",
   "license": "MIT",
