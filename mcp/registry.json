@@ -1,0 +1,328 @@
+{
+  "categories": {
+    "database": [
+      {
+        "id": "supabase",
+        "name": "Supabase",
+        "activates": ["product", "engineering"],
+        "setupFlow": "guided-cli",
+        "description": "Postgres, auth, storage",
+        "tripwire": false
+      },
+      {
+        "id": "postgres",
+        "name": "PostgreSQL",
+        "activates": ["engineering"],
+        "setupFlow": "credentials",
+        "description": "Direct Postgres connection",
+        "tripwire": false
+      },
+      {
+        "id": "mongodb",
+        "name": "MongoDB",
+        "activates": ["engineering"],
+        "setupFlow": "credentials",
+        "description": "Document database",
+        "tripwire": false
+      },
+      {
+        "id": "planetscale",
+        "name": "PlanetScale",
+        "activates": ["engineering"],
+        "setupFlow": "guided-cli",
+        "description": "Serverless MySQL",
+        "tripwire": false
+      }
+    ],
+    "product-and-engineering": [
+      {
+        "id": "linear",
+        "name": "Linear",
+        "activates": ["product", "engineering"],
+        "setupFlow": "oauth",
+        "description": "Issues, sprints, roadmap",
+        "tripwire": false
+      },
+      {
+        "id": "github",
+        "name": "GitHub",
+        "activates": ["engineering", "operations"],
+        "setupFlow": "oauth",
+        "description": "Repos, PRs, CI",
+        "tripwire": false
+      },
+      {
+        "id": "jira",
+        "name": "Jira",
+        "activates": ["engineering", "product"],
+        "setupFlow": "oauth",
+        "description": "Project tracking",
+        "tripwire": false
+      },
+      {
+        "id": "figma",
+        "name": "Figma",
+        "activates": ["design"],
+        "setupFlow": "oauth",
+        "description": "Design files, components",
+        "tripwire": false
+      },
+      {
+        "id": "vercel",
+        "name": "Vercel",
+        "activates": ["engineering"],
+        "setupFlow": "cli-token",
+        "description": "Deployments, previews",
+        "tripwire": false
+      },
+      {
+        "id": "linear-cycles",
+        "name": "Linear Cycles",
+        "activates": ["product"],
+        "setupFlow": "oauth",
+        "description": "Sprint cycle automation",
+        "tripwire": false
+      }
+    ],
+    "docs-and-knowledge": [
+      {
+        "id": "notion",
+        "name": "Notion",
+        "activates": ["product", "people", "metrics", "operations", "strategy"],
+        "setupFlow": "oauth",
+        "description": "Docs, wikis, databases",
+        "tripwire": false
+      },
+      {
+        "id": "confluence",
+        "name": "Confluence",
+        "activates": ["operations", "engineering"],
+        "setupFlow": "oauth",
+        "description": "Team documentation",
+        "tripwire": false
+      },
+      {
+        "id": "gdrive",
+        "name": "Google Drive",
+        "activates": ["finance", "legal", "operations"],
+        "setupFlow": "oauth",
+        "description": "Files, sheets, docs",
+        "tripwire": false
+      },
+      {
+        "id": "airtable",
+        "name": "Airtable",
+        "activates": ["data", "operations", "metrics"],
+        "setupFlow": "oauth",
+        "description": "Flexible databases",
+        "tripwire": false
+      }
+    ],
+    "sales-and-crm": [
+      {
+        "id": "hubspot",
+        "name": "HubSpot",
+        "activates": ["sales", "marketing"],
+        "setupFlow": "oauth",
+        "description": "CRM, pipeline, marketing",
+        "tripwire": false
+      },
+      {
+        "id": "salesforce",
+        "name": "Salesforce",
+        "activates": ["sales"],
+        "setupFlow": "oauth",
+        "description": "Enterprise CRM",
+        "tripwire": false
+      },
+      {
+        "id": "pipedrive",
+        "name": "Pipedrive",
+        "activates": ["sales"],
+        "setupFlow": "oauth",
+        "description": "Sales pipeline CRM",
+        "tripwire": false
+      },
+      {
+        "id": "close",
+        "name": "Close",
+        "activates": ["sales"],
+        "setupFlow": "api-key",
+        "description": "Inside sales CRM",
+        "tripwire": false
+      }
+    ],
+    "payments-and-finance": [
+      {
+        "id": "stripe",
+        "name": "Stripe",
+        "activates": ["finance"],
+        "setupFlow": "api-key",
+        "description": "Payments, MRR tracking",
+        "tripwire": true
+      },
+      {
+        "id": "plaid",
+        "name": "Plaid",
+        "activates": ["finance"],
+        "setupFlow": "api-key",
+        "description": "Banking data",
+        "tripwire": true
+      },
+      {
+        "id": "mercury",
+        "name": "Mercury",
+        "activates": ["finance"],
+        "setupFlow": "api-key",
+        "description": "Startup banking",
+        "tripwire": true
+      },
+      {
+        "id": "quickbooks",
+        "name": "QuickBooks",
+        "activates": ["finance"],
+        "setupFlow": "oauth",
+        "description": "Accounting",
+        "tripwire": false
+      }
+    ],
+    "marketing-and-email": [
+      {
+        "id": "resend",
+        "name": "Resend",
+        "activates": ["marketing"],
+        "setupFlow": "api-key",
+        "description": "Transactional + campaign email",
+        "tripwire": true
+      },
+      {
+        "id": "mailchimp",
+        "name": "Mailchimp",
+        "activates": ["marketing"],
+        "setupFlow": "oauth",
+        "description": "Email marketing",
+        "tripwire": true
+      },
+      {
+        "id": "customer-io",
+        "name": "Customer.io",
+        "activates": ["marketing", "growth"],
+        "setupFlow": "api-key",
+        "description": "Lifecycle messaging",
+        "tripwire": true
+      }
+    ],
+    "communication": [
+      {
+        "id": "slack",
+        "name": "Slack",
+        "activates": ["all"],
+        "setupFlow": "oauth",
+        "description": "Team + customer comms",
+        "tripwire": true
+      },
+      {
+        "id": "discord",
+        "name": "Discord",
+        "activates": ["customer", "growth"],
+        "setupFlow": "oauth",
+        "description": "Community engagement",
+        "tripwire": true
+      },
+      {
+        "id": "intercom",
+        "name": "Intercom",
+        "activates": ["customer"],
+        "setupFlow": "oauth",
+        "description": "Customer support chat",
+        "tripwire": true
+      },
+      {
+        "id": "twilio",
+        "name": "Twilio",
+        "activates": ["marketing", "customer"],
+        "setupFlow": "api-key",
+        "description": "SMS, voice",
+        "tripwire": true
+      }
+    ],
+    "analytics-and-data": [
+      {
+        "id": "posthog",
+        "name": "PostHog",
+        "activates": ["metrics", "data", "product"],
+        "setupFlow": "api-key",
+        "description": "Product analytics",
+        "tripwire": false
+      },
+      {
+        "id": "amplitude",
+        "name": "Amplitude",
+        "activates": ["metrics", "data"],
+        "setupFlow": "api-key",
+        "description": "Product analytics",
+        "tripwire": false
+      },
+      {
+        "id": "mixpanel",
+        "name": "Mixpanel",
+        "activates": ["metrics", "data"],
+        "setupFlow": "api-key",
+        "description": "Event analytics",
+        "tripwire": false
+      },
+      {
+        "id": "segment",
+        "name": "Segment",
+        "activates": ["data"],
+        "setupFlow": "api-key",
+        "description": "Data pipeline",
+        "tripwire": false
+      }
+    ],
+    "legal-and-compliance": [
+      {
+        "id": "docusign",
+        "name": "DocuSign",
+        "activates": ["legal", "sales", "people"],
+        "setupFlow": "oauth",
+        "description": "E-signatures",
+        "tripwire": true
+      },
+      {
+        "id": "clerky",
+        "name": "Clerky",
+        "activates": ["legal"],
+        "setupFlow": "api-key",
+        "description": "Startup legal docs",
+        "tripwire": true
+      }
+    ],
+    "hr-and-people": [
+      {
+        "id": "rippling",
+        "name": "Rippling",
+        "activates": ["people"],
+        "setupFlow": "oauth",
+        "description": "HR, payroll, IT",
+        "tripwire": true
+      },
+      {
+        "id": "gusto",
+        "name": "Gusto",
+        "activates": ["people"],
+        "setupFlow": "oauth",
+        "description": "Payroll, benefits",
+        "tripwire": true
+      },
+      {
+        "id": "greenhouse",
+        "name": "Greenhouse",
+        "activates": ["people"],
+        "setupFlow": "oauth",
+        "description": "Recruiting, ATS",
+        "tripwire": false
+      }
+    ]
+  }
+}

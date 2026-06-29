@@ -70,6 +70,10 @@ export interface MCPConnection {
   legalReviewed?: boolean
   projectRef?: string
   projectUrl?: string
+  setupFlow?: 'guided-cli' | 'oauth' | 'api-key' | 'credentials' | 'cli-token'
+  activatedDepartments: string[]
+  connectedAt?: string
+  tripwire: boolean
 }
 
 export interface FounderInput {
