@@ -287,7 +287,7 @@ Unlike the business agents which build your company, the debuggers are pure code
 ### 1. Load .md agents
 
 `src/` runtime scans directories for `.md` files:
-- `ceo/`, `cfo/`, `cto/`, `cmo/`, `cpo/`, `coo/` → executive agents
+- `ceo/`, `finance/exec/`, `engineering/exec/`, `marketing/exec/`, `product/exec/`, `operations/exec/` → executive agents
 - `strategy/`, `product/`, `design/`, `engineering/`, `finance/`, `marketing/`, `sales/`, `people/`, `legal/`, `operations/`, `metrics/`, `security/`, `growth/`, `customer/`, `data/` → department agents
 - `debug/` → code intelligence agents
 - `core/` → generation syscalls
@@ -393,18 +393,18 @@ startup-os/
 │   ├── briefing.md
 │   ├── morning-brief.md
 │   └── ...
-├── cfo/
+├── finance/exec/
 │   ├── data-room.md
 │   └── ...
-├── cto/
-├── cmo/
-├── cpo/
+├── engineering/exec/
+├── marketing/exec/
+├── product/exec/
 │   ├── feedback-loop.md
 │   ├── pricing-engine.md
 │   ├── changelog.md
 │   ├── ab-testing.md
 │   └── ...
-├── coo/
+├── operations/exec/
 ├── outreach/                     ← New: Outreach agents
 │   ├── cold-email.md
 │   ├── linkedin.md
@@ -486,11 +486,11 @@ When you run `/startup-os build`:
 
 **Executives (6 folders, 36 agents total):**
 - **CEO (7 agents):** briefing, decisions, okrs, board, hiring, strategy, morning-brief
-- **CFO (6 agents):** model, fundraising, budget, reporting, risk, data-room
-- **CMO (5 agents):** positioning, campaigns, content, demand, brand
-- **CTO (5 agents):** architecture, engineering-health, security-posture, infrastructure, build-vs-buy
-- **CPO (9 agents):** vision, roadmap, discovery, metrics, launch, feedback-loop, pricing-engine, changelog, ab-testing
-- **COO (5 agents):** operations, scaling, vendors, people-ops, process
+- **finance/exec/ (6 agents):** model, fundraising, budget, reporting, risk, data-room
+- **marketing/exec/ (5 agents):** positioning, campaigns, content, demand, brand
+- **engineering/exec/ (5 agents):** architecture, engineering-health, security-posture, infrastructure, build-vs-buy
+- **product/exec/ (9 agents):** vision, roadmap-oversight, discovery, metrics, launch, feedback-loop, pricing-engine, changelog, ab-testing
+- **operations/exec/ (5 agents):** daily-operations, scaling, vendors, people-ops, process
 
 **Outreach (4):** Cold Email, LinkedIn, Investor Outreach, Community
 

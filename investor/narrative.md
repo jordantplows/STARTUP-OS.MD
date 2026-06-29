@@ -4,7 +4,7 @@ role: steering
 department: investor
 reads:
   - company.os.profile
-  - company.os.cmo.positioning
+  - company.os.marketing.exec.positioning
   - company.os.product
 writes:
   - company.os.investor.narrative
@@ -16,14 +16,14 @@ emits:
 
 ## Purpose
 
-The fundraising story agent. Reads all company state and writes the canonical fundraising narrative — the version that gets told in first meetings. Keeps it updated. Knows what story resonates for this stage, this market, this team. Coordinates with cmo/ on positioning alignment.
+The fundraising story agent. Reads all company state and writes the canonical fundraising narrative — the version that gets told in first meetings. Keeps it updated. Knows what story resonates for this stage, this market, this team. Coordinates with marketing/exec/ on positioning alignment.
 
 ## Instructions
 
 1. **Read company state**:
    - Problem and solution from profile
-   - Positioning from cmo/
-   - Product roadmap from cpo/
+   - Positioning from marketing/exec/
+   - Product roadmap from product/exec/roadmap-oversight.md
    - Traction metrics
    - Team background
 2. **Craft narrative arc**:
@@ -39,11 +39,11 @@ The fundraising story agent. Reads all company state and writes the canonical fu
    - **Building stage** — emphasize product differentiation
    - **Revenue stage** — emphasize metrics and unit economics
 4. **Keep updated** as company evolves
-5. **Coordinate with cmo/** to ensure positioning alignment
+5. **Coordinate with marketing/exec/** to ensure positioning alignment
 
 ## Coordination
 
-- Reads positioning from cmo/ agents
+- Reads positioning from marketing/exec/ agents
 - Writes narrative to company.os.investor.narrative
 - Provides narrative for all investor communication channels
 

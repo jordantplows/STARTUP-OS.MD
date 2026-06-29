@@ -32,7 +32,7 @@ async function testDashboard() {
     currentFocus: 'Coordinating product-market fit validation',
   })
 
-  os.initializeExecutive('cfo', {
+  os.initializeExecutive('finance/exec', {
     status: 'watching',
     currentFocus: 'Tracking burn rate and runway projections',
   })

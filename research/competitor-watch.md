@@ -16,7 +16,7 @@ emits:
 
 ## Purpose
 
-Tracks competitor moves continuously. Pricing changes, new features, hiring signals, funding news, customer complaints, press coverage. Writes a competitive intelligence brief to company.os weekly. Alerts immediately on major moves. Feeds into cmo/ positioning agent.
+Tracks competitor moves continuously. Pricing changes, new features, hiring signals, funding news, customer complaints, press coverage. Writes a competitive intelligence brief to company.os weekly. Alerts immediately on major moves. Feeds into marketing/exec/ positioning agent.
 
 ## Instructions
 
@@ -40,9 +40,9 @@ Tracks competitor moves continuously. Pricing changes, new features, hiring sign
 
 ## Coordination
 
-- Reads positioning from cmo/ for competitive context
+- Reads positioning from marketing/exec/ for competitive context
 - Writes competitor moves to company.os.research.competitorMoves
-- Feeds cmo/ positioning updates
+- Feeds marketing/exec/ positioning updates
 - Emits `competitor-move-detected` for major events
 
 ---

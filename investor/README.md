@@ -18,5 +18,5 @@ Keeps fundraising materials always current. When traction improves, deck updates
 - Reads all company.os state for deck and data room generation
 - Writes investor pipeline to `company.os.investor`
 - Coordinates with legal/ on term sheet analysis
-- Coordinates with cfo/ on financial projections
-- Coordinates with cmo/ on narrative alignment
+- Coordinates with finance/exec/ on financial projections
+- Coordinates with marketing/exec/ on narrative alignment

@@ -1,12 +1,12 @@
 ---
 name: pricing-engine
 role: steering
-department: cpo
+department: product/exec
 reads:
   - company.os.product.metrics
   - company.os.research.competitorMoves
   - company.os.research.customerSignals
-  - company.os.cfo.model
+  - company.os.finance.exec.model
 writes:
   - company.os.product.pricing
 emits:
@@ -18,7 +18,7 @@ emits:
 
 ## Purpose
 
-Continuously evaluates pricing strategy against signals in company.os — conversion rates, churn reasons, competitor pricing, customer feedback. Runs pricing experiments. Recommends changes with supporting evidence. Coordinates with cfo/ before any pricing change.
+Continuously evaluates pricing strategy against signals in company.os — conversion rates, churn reasons, competitor pricing, customer feedback. Runs pricing experiments. Recommends changes with supporting evidence. Coordinates with finance/exec/ before any pricing change.
 
 ## Instructions
 
@@ -38,7 +38,7 @@ Continuously evaluates pricing strategy against signals in company.os — conver
    - Packaging changes
    - Value metric changes
    - Tier restructuring
-4. **Coordinate with cfo/**:
+4. **Coordinate with finance/exec/**:
    - Impact on unit economics
    - Revenue projections
    - Approval before changes
@@ -46,11 +46,11 @@ Continuously evaluates pricing strategy against signals in company.os — conver
 
 ## Coordination
 
-- Reads metrics from cpo/metrics agent
+- Reads metrics from product/exec/metrics agent
 - Reads competitor moves from research/competitor-watch
 - Reads WTP signals from research/interview-agent
 - Writes pricing strategy to company.os.product.pricing
-- Coordinates with cfo/ before changes
+- Coordinates with finance/exec/ before changes
 - Emits `pricing-recommendation` events
 
 ---

@@ -1,11 +1,11 @@
 ---
 name: data-room
 role: steering
-department: cfo
+department: finance/exec
 reads:
   - company.os.*
 writes:
-  - workspace/cfo/financial-data-room.html
+  - workspace/finance/exec/financial-data-room.html
 emits:
   - financial-data-room-ready
 ---
@@ -38,8 +38,8 @@ Assembles the financial due diligence package. Reads all finance/ state from com
 
 ## Coordination
 
-- Reads financial model from cfo/model
-- Reads budget from cfo/budget
+- Reads financial model from finance/exec/model
+- Reads budget from finance/exec/budget
 - Coordinates with investor/data-room for full package
 - Emits `financial-data-room-ready` when complete
 
@@ -64,15 +64,15 @@ interface FinancialDataRoom {
 }
 
 export async function run(os: CompanyOSManager): Promise<void> {
-  console.log('[cfo-data-room] Assembling financial data room...')
+  console.log('[finance/exec-data-room] Assembling financial data room...')
   
   const state = os.getState()
   
   // Gather financial materials
   const dataRoom: FinancialDataRoom = {
-    model: (state as any).cfo?.model || null,
-    capTable: (state as any).cfo?.capTable || null,
-    unitEconomics: (state as any).cfo?.unitEconomics || null,
+    model: (state as any).finance/exec?.model || null,
+    capTable: (state as any).finance/exec?.capTable || null,
+    unitEconomics: (state as any).finance/exec?.unitEconomics || null,
     historicals: gatherHistoricals(state),
     projections: gatherProjections(state),
     gaps: [],
@@ -85,7 +85,7 @@ export async function run(os: CompanyOSManager): Promise<void> {
   // Generate HTML
   const html = generateDataRoomHTML(dataRoom, state)
   
-  const workspaceDir = join(process.cwd(), 'workspace', 'cfo')
+  const workspaceDir = join(process.cwd(), 'workspace', 'finance/exec')
   if (!existsSync(workspaceDir)) {
     mkdirSync(workspaceDir, { recursive: true })
   }
@@ -93,16 +93,16 @@ export async function run(os: CompanyOSManager): Promise<void> {
   
   os.emitEvent({
     type: 'financial-data-room-ready',
-    from: 'cfo-data-room',
+    from: 'finance/exec-data-room',
     payload: { gapCount: dataRoom.gaps.length }
   })
   
-  writeAgentMemory('cfo-data-room', {
+  writeAgentMemory('finance/exec-data-room', {
     lastRun: new Date().toISOString(),
     gapCount: dataRoom.gaps.length
   })
   
-  console.log(`[cfo-data-room] Data room ready with ${dataRoom.gaps.length} gaps identified`)
+  console.log(`[finance/exec-data-room] Data room ready with ${dataRoom.gaps.length} gaps identified`)
 }
 
 function gatherHistoricals(state: any): any {

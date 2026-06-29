@@ -47,7 +47,7 @@ Watches for customer feedback signals from any connected source. Structures each
 - Reads signals from research/customer-intel.md
 - Writes feedback to company.os.product.feedback
 - Emits `feedback-pattern-detected` when threshold met
-- Feeds cpo/roadmap agent for prioritization
+- Feeds product/exec/roadmap-oversight agent for prioritization
 
 ---
 

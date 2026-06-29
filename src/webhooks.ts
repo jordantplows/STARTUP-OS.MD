@@ -180,8 +180,8 @@ export class WebhookManager {
  * Registers default webhook mappings
  */
 export function registerDefaultWebhooks(webhookManager: WebhookManager): void {
-  // Stripe payment → cfo/model wakes up
-  webhookManager.registerWebhook('stripe', 'payment_succeeded', 'cfo-model')
+  // Stripe payment → finance/exec/model wakes up
+  webhookManager.registerWebhook('stripe', 'payment_succeeded', 'finance-exec-model')
 
   // GitHub PR opened → engineering/code-review
   webhookManager.registerWebhook('github', 'pull_request', 'engineering-code-review')

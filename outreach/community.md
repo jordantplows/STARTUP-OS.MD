@@ -48,7 +48,7 @@ Identifies where the ICP congregates online — subreddits, Discord servers, Sla
 - Reads customer signals from research/customer-intel.md
 - Writes community activity to company.os.outreach.community
 - Emits `community-mention-found` when relevant thread detected
-- Coordinates with cmo/ on content strategy
+- Coordinates with marketing/exec/ on content strategy
 
 ## Decision Points
 

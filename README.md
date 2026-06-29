@@ -36,11 +36,11 @@ You'll answer 3 questions. Then 95+ agents spawn in parallel and the CEO gives y
 | **research/** | Daily customer signals, weekly competitor intel, trend scanner, interview synthesis |
 | **network/** | Advisor identification, partnerships, press outreach, accelerator evaluation |
 | **ceo/** | Morning brief, decisions, OKRs, board prep, hiring, strategy |
-| **cfo/** | Financial model, fundraising, budget, reporting, risk, data room |
-| **cmo/** | Positioning, campaigns, content, demand gen, brand |
-| **cto/** | Architecture, engineering health, security posture, infrastructure, build-vs-buy |
-| **cpo/** | Vision, roadmap, discovery, metrics, launch, feedback loop, pricing, changelog, A/B tests |
-| **coo/** | Operations, scaling, vendors, people ops, process |
+| **finance/exec/** | Financial model, fundraising, budget, reporting, risk, data room (CFO) |
+| **marketing/exec/** | Positioning, campaigns, content, demand gen, brand (CMO) |
+| **engineering/exec/** | Architecture, engineering health, security posture, infrastructure, build-vs-buy (CTO) |
+| **product/exec/** | Vision, roadmap oversight, discovery, metrics, launch, feedback loop, pricing, changelog, A/B tests (CPO) |
+| **operations/exec/** | Daily operations, scaling, vendors, people ops, process (COO) |
 | **strategy/** | Product direction, competitive intel, personas, MVP definition |
 | **finance/** | Model, pricing, unit economics, fundraising |
 | **legal/** | Compliance, entity, ToS/Privacy |

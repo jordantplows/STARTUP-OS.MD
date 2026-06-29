@@ -159,10 +159,10 @@ async function initCompany(answers: string): Promise<void> {
 
   const executiveAgents = allAgents.filter(a =>
     a.metadata.name === 'ceo' ||
-    a.metadata.name === 'cfo' ||
-    a.metadata.name === 'cto' ||
-    a.metadata.name === 'cmo' ||
-    a.metadata.name === 'cpo'
+    a.metadata.name === 'finance-exec' ||
+    a.metadata.name === 'engineering-exec' ||
+    a.metadata.name === 'marketing-exec' ||
+    a.metadata.name === 'product-exec'
   )
 
   const executor = new MDExecutor(os)
@@ -550,7 +550,7 @@ function showHelp(): void {
   console.log('  startup-os ask "what should I work on today"')
   console.log('  startup-os dashboard')
   console.log('  startup-os connect supabase\n')
-  console.log('The .md files in ceo/, cfo/, strategy/, engineering/, etc.')
+  console.log('The .md files in ceo/, finance/exec/, marketing/exec/, engineering/, etc.')
   console.log('are the agents. This runtime loads and executes them.\n')
 }
 

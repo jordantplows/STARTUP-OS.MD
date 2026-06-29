@@ -1,7 +1,7 @@
 ---
 name: ab-testing
 role: steering
-department: cpo
+department: product/exec
 reads:
   - company.os.product.experiments
 writes:
@@ -45,7 +45,7 @@ Designs, tracks, and reads A/B experiments. When a hypothesis exists in company.
 - Reads experiment proposals from product/ agents
 - Writes experiment design and results to company.os.product.experiments
 - Emits `experiment-completed` when results available
-- Coordinates with cpo/metrics for data collection
+- Coordinates with metrics/exec for data collection
 
 ---
 

@@ -217,6 +217,8 @@ Changes:
 - cfo/ → finance/exec/
 - cmo/ → marketing/exec/
 - cto/ → engineering/exec/
+- cpo/ → product/exec/
+- coo/ → operations/exec/
 - All department agents updated with reportsTo field
 
 Updated:
@@ -225,7 +227,8 @@ Updated:
 - All .md agents — corrected read/write paths
 
 Renamed for clarity:
-- product/exec/roadmap.md → roadmap-oversight.md
+- product/exec/roadmap.md → product/exec/roadmap-oversight.md
+- operations/exec/operations.md → operations/exec/daily-operations.md
 
 No functional behavior change — this is structural only. All
 agent logic, watch/reason/act cycles, and company.os coordination

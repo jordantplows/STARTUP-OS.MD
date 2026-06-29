@@ -4,7 +4,7 @@ role: steering
 department: network
 reads:
   - company.os.profile
-  - company.os.cmo.positioning
+  - company.os.marketing.exec.positioning
 writes:
   - company.os.network.press
 emits:
@@ -41,7 +41,7 @@ Identifies journalists, podcasts, newsletters that cover this space and reach th
 
 ## Coordination
 
-- Reads positioning from cmo/ for story angles
+- Reads positioning from marketing/exec/ for story angles
 - Writes press contacts to company.os.network.press
 - Emits `press-opportunity-identified` when story-worthy event occurs
 

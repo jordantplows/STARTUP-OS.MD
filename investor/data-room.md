@@ -41,7 +41,7 @@ Assembles investor due diligence on demand. Reads from every department's state 
 
 - Reads from all departments
 - Coordinates with legal/ for legal docs
-- Coordinates with cfo/ for financials
+- Coordinates with finance/exec/ for financials
 - Emits `data-room-gap-found` for missing critical items
 
 ---
@@ -71,14 +71,14 @@ export async function run(os: CompanyOSManager): Promise<void> {
   // Company & Legal
   items.push(
     { category: 'Company', name: 'Formation documents', status: 'missing', instructions: 'Obtain from legal/ or incorporation service' },
-    { category: 'Company', name: 'Cap table', status: (state as any).cfo?.capTable ? 'available' : 'missing', location: 'cfo/cap-table' },
+    { category: 'Company', name: 'Cap table', status: (state as any).finance?.exec?.capTable ? 'available' : 'missing', location: 'finance/exec/cap-table' },
     { category: 'Legal', name: 'Employee agreements', status: 'missing', instructions: 'Create via legal/ agent' }
   )
   
   // Financials
   items.push(
-    { category: 'Financials', name: 'Financial model', status: (state as any).cfo?.model ? 'available' : 'missing', location: 'cfo/model' },
-    { category: 'Financials', name: 'Unit economics', status: (state as any).cfo?.model ? 'available' : 'missing', location: 'cfo/model' },
+    { category: 'Financials', name: 'Financial model', status: (state as any).finance?.exec?.model ? 'available' : 'missing', location: 'finance/exec/model' },
+    { category: 'Financials', name: 'Unit economics', status: (state as any).finance?.exec?.model ? 'available' : 'missing', location: 'finance/exec/model' },
     { category: 'Financials', name: 'Revenue history', status: state.profile.revenue > 0 ? 'available' : 'missing' }
   )
   
@@ -86,7 +86,7 @@ export async function run(os: CompanyOSManager): Promise<void> {
   items.push(
     { category: 'Product', name: 'Product demo', status: 'missing', instructions: 'Record product demo video' },
     { category: 'Product', name: 'Technical architecture', status: 'missing', instructions: 'Create architecture diagram' },
-    { category: 'Product', name: 'Product roadmap', status: (state as any).product?.roadmap ? 'available' : 'missing', location: 'product/roadmap' }
+    { category: 'Product', name: 'Product roadmap', status: (state as any).product?.exec?.roadmap ? 'available' : 'missing', location: 'product/exec/roadmap-oversight' }
   )
   
   // Team

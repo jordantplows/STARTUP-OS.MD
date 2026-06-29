@@ -57,7 +57,7 @@ Watches company.os for ICP definition and customer signals. Writes personalized 
 ## Decision Points
 
 - **Low engagement rates** → raise decision: "Email messaging not resonating — pivot angle?"
-- **High objection rate** → surface pattern to product/ and cmo/
+- **High objection rate** → surface pattern to product/ and marketing/exec/
 
 ---
 
