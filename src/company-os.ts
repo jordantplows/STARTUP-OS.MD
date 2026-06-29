@@ -266,6 +266,7 @@ export interface CompanyOS {
   decisions: Decision[]
   events: Event[]
   mcps: Record<string, MCPConnection>
+  mcpPromptDeferred?: boolean
   founderInput: FounderInput[]
   outreach: {
     sequences: OutreachSequence[]
@@ -276,7 +277,6 @@ export interface CompanyOS {
     targets: Investor[]
     dataRoom: DataRoomItem[]
     narrative: string
-    deckVersion: string
     processStatus: 'not-started' | 'preparing' | 'outreaching' | 'in-process' | 'closed'
     pipeline: any[]
   }
@@ -357,7 +357,6 @@ export class CompanyOSManager {
         targets: [],
         dataRoom: [],
         narrative: '',
-        deckVersion: '',
         processStatus: 'not-started',
         pipeline: []
       },

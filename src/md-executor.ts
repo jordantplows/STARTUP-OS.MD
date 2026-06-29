@@ -15,6 +15,10 @@ export interface ExecutionResult {
   agentName: string
 }
 
+export interface ExecutionOptions {
+  maxTokens?: number
+}
+
 export class MDExecutor {
   private os: CompanyOSManager
 
@@ -25,7 +29,8 @@ export class MDExecutor {
   async execute(
     agent: LoadedAgent,
     context: string,
-    founderMessage?: string
+    founderMessage?: string,
+    options?: ExecutionOptions
   ): Promise<ExecutionResult> {
     try {
       const state = this.os.getState()
@@ -105,18 +110,19 @@ export class MDExecutor {
     agents: LoadedAgent[],
     context: string,
     founderMessage?: string,
-    sequential: boolean = false
+    sequential: boolean = false,
+    options?: ExecutionOptions
   ): Promise<ExecutionResult[]> {
     if (sequential) {
       const results: ExecutionResult[] = []
       for (const agent of agents) {
-        const result = await this.execute(agent, context, founderMessage)
+        const result = await this.execute(agent, context, founderMessage, options)
         results.push(result)
       }
       return results
     } else {
       return Promise.all(
-        agents.map(agent => this.execute(agent, context, founderMessage))
+        agents.map(agent => this.execute(agent, context, founderMessage, options))
       )
     }
   }

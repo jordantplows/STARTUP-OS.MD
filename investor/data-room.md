@@ -112,7 +112,7 @@ export async function run(os: CompanyOSManager): Promise<void> {
   
   // Update company.os
   if (!(state as any).investor) {
-    (state as any).investor = { targets: [], dataRoom: [], narrative: '', deckVersion: '', processStatus: 'not-started', pipeline: [] }
+    (state as any).investor = { targets: [], dataRoom: [], narrative: '', processStatus: 'not-started', pipeline: [] }
   }
   (state as any).investor.dataRoom = items
   os.save()

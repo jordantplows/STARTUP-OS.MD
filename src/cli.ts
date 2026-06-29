@@ -121,44 +121,98 @@ async function initCompany(answers: string): Promise<void> {
   }
 
   console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
-  console.log(' Company initialized. Loading agents...')
+  console.log(' Company initialized.')
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
 
+  // PHASE 1: Show immediate feedback
   const loader = new MDLoader()
-  const agents = loader.loadAllAgents()
+  const allAgents = loader.loadAllAgents()
 
-  console.log(`Loaded ${agents.length} agents:\n`)
-
-  for (const agent of agents.slice(0, 10)) {
+  // Initialize all departments first
+  for (const agent of allAgents) {
     os.initializeDepartment(agent.metadata.name, {
-      currentFocus: 'Initializing',
+      currentFocus: 'Compiling...',
       status: 'initializing',
     })
-    console.log(`● ${agent.metadata.name.padEnd(25)} ${agent.metadata.department}`)
   }
 
-  if (agents.length > 10) {
-    console.log(`... and ${agents.length - 10} more\n`)
+  // PHASE 2: Run executive agents FIRST (parallel) for fast first look
+  console.log('Compiling... [executives running]')
+
+  const executiveAgents = allAgents.filter(a =>
+    a.metadata.name === 'ceo' ||
+    a.metadata.name === 'cfo' ||
+    a.metadata.name === 'cto' ||
+    a.metadata.name === 'cmo' ||
+    a.metadata.name === 'cpo'
+  )
+
+  const executor = new MDExecutor(os)
+
+  // Run executives in parallel with smaller token budgets
+  const executiveResults = await Promise.all(
+    executiveAgents.map(agent =>
+      executor.execute(agent, 'Company initialization', undefined, { maxTokens: 2048 })
+    )
+  )
+
+  // Show CEO briefing immediately
+  const ceoResult = executiveResults.find(r => r.agentName === 'ceo')
+
+  console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+  console.log(` ${os.getState().profile.companyName || 'Your Company'} · CEO`)
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
+
+  if (ceoResult?.success && ceoResult.output) {
+    console.log(ceoResult.output)
+  } else {
+    console.log('Company compiled. Departments are initializing in the background.')
   }
 
-  console.log('\nBooting CEO for first briefing...\n')
+  // PHASE 3: Run all other department agents in parallel (background)
+  const departmentAgents = allAgents.filter(a =>
+    !executiveAgents.find(e => e.metadata.name === a.metadata.name)
+  )
 
-  const ceoAgent = agents.find(a => a.metadata.name === 'ceo')
-  if (ceoAgent) {
-    const executor = new MDExecutor(os)
-    const result = await executor.execute(ceoAgent, 'Company initialization')
+  let completed = executiveAgents.length
+  const total = allAgents.length
 
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
-    console.log(` ${os.getState().profile.companyName || 'Your Company'} · CEO`)
+  // Show progress and run departments in parallel
+  console.log(`\nCompiling... [${completed}/${total} departments ready]`)
+
+  const departmentPromises = departmentAgents.map(async (agent) => {
+    const result = await executor.execute(agent, 'Company initialization', undefined, { maxTokens: 2048 })
+    completed++
+    // Update progress in place
+    process.stdout.write(`\rCompiling... [${completed}/${total} departments ready]`)
+    return result
+  })
+
+  await Promise.all(departmentPromises)
+
+  console.log(`\rCompiling... [${total}/${total} departments ready] ✓\n`)
+
+  // PHASE 4: Surface MCP needs
+  const mcpNeeds = detectMCPNeeds(os.getState(), allAgents)
+
+  if (mcpNeeds.length > 0) {
+    console.log('\n━━ CONNECT TOOLS TO ACTIVATE YOUR COMPANY ━━━━━━')
+    console.log('Your company is compiled but not yet running.')
+    console.log('Connect these to bring it to life:\n')
+
+    mcpNeeds.forEach((need, idx) => {
+      const blocked = need.blockedWithout ? ' [REQUIRED]' : ''
+      console.log(`[${idx + 1}] ${need.tools.join(', ')}${blocked}`)
+      console.log(`    → unlocks ${need.unlocks.join(', ')}`)
+      console.log(`    ${need.reason}\n`)
+    })
+
+    console.log('Type a number to connect, or "later" to explore on your own.')
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
 
-    if (result.success && result.output) {
-      console.log(result.output)
-    } else {
-      console.log('CEO briefing not available yet.')
-    }
-
-    console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
+    // Store MCP prompt state
+    os.getState().mcpPromptDeferred = true
+    os.save()
   }
 
   console.log('Your company is running.')
@@ -167,6 +221,53 @@ async function initCompany(answers: string): Promise<void> {
   console.log('  startup-os ask "what should I work on today"')
   console.log('  startup-os status')
   console.log('  startup-os agents\n')
+}
+
+interface MCPNeed {
+  tools: string[]
+  unlocks: string[]
+  reason: string
+  blockedWithout: boolean
+}
+
+function detectMCPNeeds(state: any, agents: any[]): MCPNeed[] {
+  const needs: MCPNeed[] = []
+
+  // Analyze which departments need which MCPs
+  const hasOutreach = agents.some(a => a.metadata.department === 'outreach')
+  const hasInvestor = agents.some(a => a.metadata.department === 'investor')
+  const hasResearch = agents.some(a => a.metadata.department === 'research')
+
+  if (hasOutreach || hasInvestor) {
+    needs.push({
+      tools: ['Gmail', 'LinkedIn'],
+      unlocks: ['outreach', 'investor', 'network'],
+      reason: 'Send investor outreach, customer emails, and partnership intros',
+      blockedWithout: false
+    })
+  }
+
+  if (hasResearch) {
+    needs.push({
+      tools: ['Brave Search', 'WebFetch'],
+      unlocks: ['research', 'competitor-watch', 'customer-intel'],
+      reason: 'Monitor competitors, track customer signals, and research trends',
+      blockedWithout: false
+    })
+  }
+
+  // Check if product/engineering agents need dev tools
+  const hasEngineering = agents.some(a => a.metadata.department === 'engineering')
+  if (hasEngineering) {
+    needs.push({
+      tools: ['GitHub', 'Linear'],
+      unlocks: ['engineering', 'product', 'metrics'],
+      reason: 'Track issues, pull requests, and engineering velocity',
+      blockedWithout: false
+    })
+  }
+
+  return needs
 }
 
 async function askCompany(message: string): Promise<void> {
@@ -204,7 +305,7 @@ async function askCompany(message: string): Promise<void> {
 
   for (const result of results) {
     if (result.success && result.output) {
-      console.log(`━━ ${result.agentName} ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
+      console.log(`━━ ${result.agentName} ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
       console.log(result.output)
       console.log()
     } else if (!result.success) {

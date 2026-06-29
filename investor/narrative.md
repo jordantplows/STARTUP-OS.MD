@@ -45,7 +45,7 @@ The fundraising story agent. Reads all company state and writes the canonical fu
 
 - Reads positioning from cmo/ agents
 - Writes narrative to company.os.investor.narrative
-- Coordinates with investor/pitch-deck.md for deck alignment
+- Provides narrative for all investor communication channels
 
 ---
 
@@ -95,7 +95,6 @@ export async function run(os: CompanyOSManager): Promise<void> {
       targets: [],
       dataRoom: [],
       narrative: '',
-      deckVersion: '',
       processStatus: 'not-started',
       pipeline: []
     }

@@ -4,9 +4,8 @@ Manages all investor relations, fundraising preparation, and due diligence.
 
 ## Agents
 
-- **pitch-deck** — Live agent that maintains pitch deck as company.os evolves
-- **data-room** — Assembles investor due diligence on demand
 - **target-investors** — Research agent for identifying and scoring target VCs
+- **data-room** — Assembles investor due diligence on demand
 - **narrative** — Maintains canonical fundraising story
 - **term-sheet** — Analyzes term sheets and flags founder-unfavorable clauses
 

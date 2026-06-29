@@ -122,7 +122,6 @@ export async function run(os: CompanyOSManager): Promise<void> {
       targets: [],
       dataRoom: [],
       narrative: '',
-      deckVersion: '',
       processStatus: 'not-started',
       pipeline: []
     }

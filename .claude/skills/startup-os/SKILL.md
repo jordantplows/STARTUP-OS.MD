@@ -411,9 +411,8 @@ startup-os/
 │   ├── investor-outreach.md
 │   └── community.md
 ├── investor/                     ← New: Investor relations
-│   ├── pitch-deck.md
-│   ├── data-room.md
 │   ├── target-investors.md
+│   ├── data-room.md
 │   ├── narrative.md
 │   └── term-sheet.md
 ├── research/                     ← New: Intelligence gathering
