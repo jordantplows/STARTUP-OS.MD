@@ -1,6 +1,6 @@
 {
   "name": "startup-os",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "AI-powered company operating system",
   "author": {
     "name": "Jordan Plows",
@@ -9,7 +9,9 @@
   "homepage": "https://github.com/jordantplows/startup-os",
   "repository": "https://github.com/jordantplows/startup-os",
   "license": "MIT",
-  "skills": ["SKILL.md"],
+  "skills": [
+    "SKILL.md"
+  ],
   "skillHandler": "skill-handler.ts",
   "minClaudeCodeVersion": "2.1.101"
 }

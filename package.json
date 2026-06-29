@@ -1,6 +1,6 @@
 {
   "name": "startup-os",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "An AI-powered operating system for startups. One slash command instantiates your entire company as parallel steering agents that watch, decide, and coordinate through shared state.",
   "keywords": [
     "startup",
