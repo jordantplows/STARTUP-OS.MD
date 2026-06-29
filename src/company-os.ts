@@ -68,6 +68,8 @@ export interface MCPConnection {
   activates: string[]
   lastUsed?: string
   legalReviewed?: boolean
+  projectRef?: string
+  projectUrl?: string
 }
 
 export interface FounderInput {

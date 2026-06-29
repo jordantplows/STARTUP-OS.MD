@@ -225,8 +225,8 @@ async function initCompany(answers: string): Promise<void> {
 
       // Store database need for later handling
       os.getState().pendingDatabaseSetup = {
-        reason: databaseNeed.databaseReason,
-        department: databaseNeed.unlocks[0]
+        reason: databaseNeed.databaseReason || 'persistent data storage',
+        department: databaseNeed.unlocks[0] || 'product'
       }
       os.save()
     } else {

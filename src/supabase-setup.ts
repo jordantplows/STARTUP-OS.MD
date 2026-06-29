@@ -213,8 +213,8 @@ async function getProjectAPIKeys(projectRef: string): Promise<{ anonKey: string;
     }
 
     return {
-      anonKey: anonMatch[1],
-      serviceKey: serviceMatch[1]
+      anonKey: anonMatch[1] || '',
+      serviceKey: serviceMatch[1] || ''
     }
   } catch (error) {
     console.error('Failed to get API keys')
@@ -500,7 +500,7 @@ export async function connectExistingSupabase(os: CompanyOSManager): Promise<boo
       return false
     }
 
-    const projectRef = refMatch[1]
+    const projectRef = refMatch[1] || 'unknown'
 
     console.log('✓ Connection validated')
 
