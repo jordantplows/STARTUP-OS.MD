@@ -3,14 +3,16 @@
   "version": "0.5.4",
   "description": "An AI-powered operating system for startups. One slash command instantiates your entire company as parallel steering agents that watch, decide, and coordinate through shared state.",
   "keywords": [
-    "startup",
     "ai-agents",
     "claude",
     "company-os",
     "autonomous",
-    "founder-tools",
     "mcp",
-    "claude-code"
+    "claude-code",
+    "claude",
+    "memory",
+    "multi-agent",
+    "parallel-agents"
   ],
   "author": "Jordan Plows <jordan@plows.ai>",
   "license": "MIT",
