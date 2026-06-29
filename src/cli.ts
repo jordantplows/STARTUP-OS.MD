@@ -4,6 +4,7 @@ import { CompanyOSManager } from './company-os.js'
 import { MDLoader } from './md-loader.js'
 import { MDExecutor } from './md-executor.js'
 import { routeFounderInput } from './router.js'
+import { setupSupabaseFlow, connectExistingSupabase } from './supabase-setup.js'
 
 const args = process.argv.slice(2)
 const command = args[0]
@@ -49,6 +50,17 @@ async function main(): Promise<void> {
 
       case 'reset': {
         await resetCompany()
+        break
+      }
+
+      case 'connect': {
+        if (!rest) {
+          console.error('Usage: startup-os connect <service>')
+          console.error('Available: supabase')
+          process.exit(1)
+        }
+
+        await connectService(rest)
         break
       }
 
@@ -196,19 +208,42 @@ async function initCompany(answers: string): Promise<void> {
   const mcpNeeds = detectMCPNeeds(os.getState(), allAgents)
 
   if (mcpNeeds.length > 0) {
-    console.log('\n━━ CONNECT TOOLS TO ACTIVATE YOUR COMPANY ━━━━━━')
-    console.log('Your company is compiled but not yet running.')
-    console.log('Connect these to bring it to life:\n')
+    const databaseNeed = mcpNeeds.find(n => n.databaseRequired)
 
-    mcpNeeds.forEach((need, idx) => {
-      const blocked = need.blockedWithout ? ' [REQUIRED]' : ''
-      console.log(`[${idx + 1}] ${need.tools.join(', ')}${blocked}`)
-      console.log(`    → unlocks ${need.unlocks.join(', ')}`)
-      console.log(`    ${need.reason}\n`)
-    })
+    if (databaseNeed) {
+      // Special handling for database needs
+      console.log('\n━━ YOUR PRODUCT NEEDS A DATABASE ━━━━━━━━━━━━━━━━')
+      console.log(`${databaseNeed.unlocks[0]} needs persistent storage for ${databaseNeed.databaseReason?.toLowerCase()}.`)
+      console.log('')
+      console.log('I recommend Supabase — Postgres, auth, and storage')
+      console.log('in one place, free to start.')
+      console.log('')
+      console.log('[1] Set up Supabase now (takes about 3 minutes)')
+      console.log('[2] I already have a Supabase project')
+      console.log('[3] Skip for now — I\'ll set it up later')
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
 
-    console.log('Type a number to connect, or "later" to explore on your own.')
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
+      // Store database need for later handling
+      os.getState().pendingDatabaseSetup = {
+        reason: databaseNeed.databaseReason,
+        department: databaseNeed.unlocks[0]
+      }
+      os.save()
+    } else {
+      console.log('\n━━ CONNECT TOOLS TO ACTIVATE YOUR COMPANY ━━━━━━')
+      console.log('Your company is compiled but not yet running.')
+      console.log('Connect these to bring it to life:\n')
+
+      mcpNeeds.forEach((need, idx) => {
+        const blocked = need.blockedWithout ? ' [REQUIRED]' : ''
+        console.log(`[${idx + 1}] ${need.tools.join(', ')}${blocked}`)
+        console.log(`    → unlocks ${need.unlocks.join(', ')}`)
+        console.log(`    ${need.reason}\n`)
+      })
+
+      console.log('Type a number to connect, or "later" to explore on your own.')
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
+    }
 
     // Store MCP prompt state
     os.getState().mcpPromptDeferred = true
@@ -228,10 +263,56 @@ interface MCPNeed {
   unlocks: string[]
   reason: string
   blockedWithout: boolean
+  databaseRequired?: boolean
+  databaseReason?: string
 }
 
 function detectMCPNeeds(state: any, agents: any[]): MCPNeed[] {
   const needs: MCPNeed[] = []
+
+  // Check if any department needs a database
+  const productAgent = agents.find(a => a.metadata.name === 'mvp' || a.metadata.department === 'product')
+  const engineeringAgent = agents.find(a => a.metadata.department === 'engineering')
+  const customerAgent = agents.find(a => a.metadata.department === 'customer')
+
+  let databaseReason = ''
+  let databaseDept = ''
+
+  // Product needs database if building CRUD features
+  if (productAgent && (
+    state.profile.oneline?.toLowerCase().includes('account') ||
+    state.profile.oneline?.toLowerCase().includes('user') ||
+    state.profile.oneline?.toLowerCase().includes('dashboard') ||
+    state.profile.oneline?.toLowerCase().includes('platform') ||
+    state.profile.oneline?.toLowerCase().includes('saas') ||
+    state.profile.businessModel?.toLowerCase().includes('saas')
+  )) {
+    databaseReason = 'User accounts, saved data, and persistent state'
+    databaseDept = 'product'
+  }
+
+  // Engineering needs database if tech stack implies backend
+  if (!databaseReason && engineeringAgent) {
+    databaseReason = 'Backend data storage and API persistence'
+    databaseDept = 'engineering'
+  }
+
+  // Customer department needs database for customer records
+  if (!databaseReason && customerAgent) {
+    databaseReason = 'Customer records and support history'
+    databaseDept = 'customer'
+  }
+
+  if (databaseReason) {
+    needs.push({
+      tools: ['Supabase'],
+      unlocks: [databaseDept, 'backend', 'auth'],
+      reason: databaseReason,
+      blockedWithout: true,
+      databaseRequired: true,
+      databaseReason
+    })
+  }
 
   // Analyze which departments need which MCPs
   const hasOutreach = agents.some(a => a.metadata.department === 'outreach')
@@ -418,6 +499,19 @@ async function resetCompany(): Promise<void> {
   console.log('Run: startup-os build "<idea>" to start over.\n')
 }
 
+async function connectService(service: string): Promise<void> {
+  const os = new CompanyOSManager()
+
+  if (service === 'supabase' || service === '1') {
+    await setupSupabaseFlow(os)
+  } else if (service === 'supabase-existing' || service === '2') {
+    await connectExistingSupabase(os)
+  } else {
+    console.error(`Unknown service: ${service}`)
+    console.error('Available: supabase')
+  }
+}
+
 function showHelp(): void {
   console.log('startup-os · company runtime\n')
   console.log('Commands:')
@@ -426,12 +520,13 @@ function showHelp(): void {
   console.log('  ask <message>         Talk to your company')
   console.log('  status                Get CEO briefing')
   console.log('  agents                List all loaded agents')
+  console.log('  connect <service>     Connect external service (supabase)')
   console.log('  reset                 Clear company state\n')
   console.log('Example:')
   console.log('  startup-os build "AI code review for security teams"')
   console.log('  startup-os init idea "Security engineers at B2B SaaS" "Teams want automation"')
   console.log('  startup-os ask "what should I work on today"')
-  console.log('  startup-os status\n')
+  console.log('  startup-os connect supabase\n')
   console.log('The .md files in ceo/, cfo/, strategy/, engineering/, etc.')
   console.log('are the agents. This runtime loads and executes them.\n')
 }

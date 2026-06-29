@@ -267,6 +267,10 @@ export interface CompanyOS {
   events: Event[]
   mcps: Record<string, MCPConnection>
   mcpPromptDeferred?: boolean
+  pendingDatabaseSetup?: {
+    reason: string
+    department: string
+  }
   founderInput: FounderInput[]
   outreach: {
     sequences: OutreachSequence[]
